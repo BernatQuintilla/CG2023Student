@@ -32,8 +32,6 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	// ...
-
 	framebuffer.Render();
 }
 
