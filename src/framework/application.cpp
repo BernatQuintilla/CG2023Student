@@ -32,6 +32,14 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
+	Image framebuffer(1280, 720);
+	for (int x = 0; x < framebuffer.width; ++x) {
+		for (int y = 0; y < framebuffer.height; ++y) {
+			framebuffer.SetPixel(x, y, Color(255, 255, 255));
+		}
+	}
+	framebuffer.DrawLineDDA(50, 50, 1000, 600, Color(255, 0, 0));
+	framebuffer.DrawLineBresenham(50, 50, 440, 700, Color(255, 0, 0));
 	framebuffer.Render();
 }
 
