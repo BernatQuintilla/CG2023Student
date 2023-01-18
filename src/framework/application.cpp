@@ -38,8 +38,7 @@ void Application::Render(void)
 			framebuffer.SetPixel(x, y, Color(255, 255, 255));
 		}
 	}
-	framebuffer.DrawLineDDA(50, 50, 1000, 600, Color(255, 0, 0));
-	framebuffer.DrawLineBresenham(50, 50, 440, 700, Color(255, 0, 0));
+	framebuffer.DrawLineBresenham(0, 0, mouse_position.x, mouse_position.y, Color(255, 0, 0));
 	framebuffer.Render();
 }
 
@@ -53,6 +52,9 @@ void Application::Update(float seconds_elapsed)
 void Application::OnKeyPressed( SDL_KeyboardEvent event )
 {
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
+	switch (event.keysym.sym) {
+		case SDLK_l: framebuffer.DrawLineBresenham(0, 0, mouse_position.x, mouse_position.y, Color(255, 0, 0));
+	}
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
 	}
