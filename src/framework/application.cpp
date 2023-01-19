@@ -2,6 +2,8 @@
 #include "mesh.h"
 #include "shader.h"
 #include "utils.h" 
+#include <cmath>
+#include <iostream>
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -38,7 +40,8 @@ void Application::Render(void)
 			framebuffer.SetPixel(x, y, Color(255, 255, 255));
 		}
 	}
-	framebuffer.DrawLineBresenham(0, 0, mouse_position.x, mouse_position.y, Color(255, 0, 0));
+	framebuffer.DrawLineBresenham(300, 200, 400, 500, Color(255, 0, 0));
+	framebuffer.DrawLineDDA(300, 200, 400, 500, Color(255, 0, 0));
 	framebuffer.Render();
 }
 
@@ -52,11 +55,11 @@ void Application::Update(float seconds_elapsed)
 void Application::OnKeyPressed( SDL_KeyboardEvent event )
 {
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
-	switch (event.keysym.sym) {
-		case SDLK_l: framebuffer.DrawLineBresenham(0, 0, mouse_position.x, mouse_position.y, Color(255, 0, 0));
-	}
+	int mouse_x = lround(mouse_position.x);
+	int mouse_y = lround(mouse_position.y);
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
+		case SDLK_l: framebuffer.DrawLineBresenham(0,0,mouse_x,mouse_y,Color(255,0,0)); break;
 	}
 }
 
@@ -70,7 +73,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
-
+		
 	}
 }
 

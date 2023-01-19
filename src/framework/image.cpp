@@ -360,16 +360,18 @@ void FloatImage::Resize(unsigned int width, unsigned int height)
 }
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 {
-	float dx, dy;
+	int dx, dy, x, y;
 	dx = x1 - x0;
 	dy = y1 - y0;
 	int d = std::max(abs(dx), abs(dy));
-	float v[2] = { dx / d, dy / d };
-
+	int vy = (float)dx / d;
+	int vx = (float)dy / d;
+	x = x0;
+	y = y0;
 	for (int i = 0; i < d; i++) {
-		x0 += v[0];
-		y0 += v[1];
-		SetPixel(x0, y0, c);
+		x += vx;
+		y += vy;
+		SetPixel(x, y, c);
 	}
 }
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
@@ -396,4 +398,29 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 		}
 		SetPixel(x, y, c);
 	}
+	//eighth octant
+	/*int dx8, dy8, inc_E8, inc_NE8, d8, x8, y8;
+	y1=-y1; int dx8, dy8, inc_E8, inc_NE8, d8, x8, y8;
+	y1 = -y1;
+	y0 = -y0;
+	dx8 = x1 - x0;
+	dy8 = y1 - y0;
+	inc_E8 = 2 * dy8;
+	inc_NE8 = 2 * (dy8 - dx8);
+	d8 = 2 * dy8 - dx8;
+	x8 = x0;
+	y8 = y0;
+	SetPixel(x8, y8, c);
+	while (x8 < x1) {
+		if (d8 <= 0) {
+			d8 = d8 + inc_E8;
+			x8 = x8 + 1;
+		}
+		else {
+			d8 = d8 + inc_NE8;
+			x8 = x8 + 1;
+			y8 = y8 + 1;
+		}
+		SetPixel(x8, y8, c);
+	}*/
 }
