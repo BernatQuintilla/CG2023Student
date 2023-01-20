@@ -360,18 +360,18 @@ void FloatImage::Resize(unsigned int width, unsigned int height)
 }
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 {
-	int dx, dy, x, y;
+	float dx, dy, x, y;
 	dx = x1 - x0;
 	dy = y1 - y0;
-	int d = std::max(abs(dx), abs(dy));
-	int vy = (float)dx / d;
-	int vx = (float)dy / d;
-	x = x0;
-	y = y0;
+	float d = std::max(abs(dx), abs(dy));
+	float vy = (float)dx / d;
+	float vx = (float)dy / d;
+	float x0f = x0;
+	float y0f = y0;
 	for (int i = 0; i < d; i++) {
-		x += vx;
-		y += vy;
-		SetPixel(x, y, c);
+		x0f += vx;
+		y0f += vy;
+		SetPixel(x0f, y0f, c);
 	}
 }
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
