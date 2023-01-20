@@ -398,29 +398,16 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 		}
 		SetPixel(x, y, c);
 	}
-	//eighth octant
-	/*int dx8, dy8, inc_E8, inc_NE8, d8, x8, y8;
-	y1=-y1; int dx8, dy8, inc_E8, inc_NE8, d8, x8, y8;
-	y1 = -y1;
-	y0 = -y0;
-	dx8 = x1 - x0;
-	dy8 = y1 - y0;
-	inc_E8 = 2 * dy8;
-	inc_NE8 = 2 * (dy8 - dx8);
-	d8 = 2 * dy8 - dx8;
-	x8 = x0;
-	y8 = y0;
-	SetPixel(x8, y8, c);
-	while (x8 < x1) {
-		if (d8 <= 0) {
-			d8 = d8 + inc_E8;
-			x8 = x8 + 1;
+	while (x > x1) {
+		if (d <= 0) {
+			d = d - inc_E;
+			x = x - 1;
 		}
 		else {
-			d8 = d8 + inc_NE8;
-			x8 = x8 + 1;
-			y8 = y8 + 1;
+			d = d - inc_NE;
+			x = x - 1;
+			y = y - 1;
 		}
-		SetPixel(x8, y8, c);
-	}*/
+		SetPixel(x, y, c);
+	}
 }
