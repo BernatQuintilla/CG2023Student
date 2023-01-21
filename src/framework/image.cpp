@@ -128,7 +128,8 @@ void Image::FlipY()
 
 bool Image::LoadPNG(const char* filename, bool flip_y)
 {
-	std::ifstream file(filename, std::ios::in | std::ios::binary | std::ios::ate);
+	std::string sfullPath = absResPath(filename);
+	std::ifstream file(sfullPath, std::ios::in | std::ios::binary | std::ios::ate);
 
 	// Get filesize
 	std::streamsize size = 0;
@@ -155,9 +156,26 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 		return false;
 
 	size_t bufferSize = out_image.size();
-	pixels = new Color[bufferSize];
-	bytes_per_pixel = bufferSize / (width * height);
-	memcpy(pixels, &out_image[0], bufferSize);
+	unsigned int originalBytesPerPixel = (unsigned int)bufferSize / (width * height);
+	
+	// Force 3 channels
+	bytes_per_pixel = 3;
+
+	if (originalBytesPerPixel == 3) {
+		pixels = new Color[bufferSize];
+		memcpy(pixels, &out_image[0], bufferSize);
+	}
+	else if (originalBytesPerPixel == 4) {
+
+		unsigned int newBufferSize = width * height * bytes_per_pixel;
+		pixels = new Color[newBufferSize];
+
+		unsigned int k = 0;
+		for (unsigned int i = 0; i < bufferSize; i += originalBytesPerPixel) {
+			pixels[k] = Color(out_image[i], out_image[i + 1], out_image[i + 2]);
+			k++;
+		}
+	}
 
 	// Flip pixels in Y
 	if (flip_y)
@@ -234,7 +252,9 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 	for (unsigned int y = 0; y < height; ++y) {
 		for (unsigned int x = 0; x < width; ++x) {
 			unsigned int pos = y * width * bytesPerPixel + x * bytesPerPixel;
-			SetPixel(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
+			// Make sure we don't access out of memory
+			if( (pos < imageSize) && (pos + 1 < imageSize) && (pos + 2 < imageSize))
+				SetPixel(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
 		}
 	}
 

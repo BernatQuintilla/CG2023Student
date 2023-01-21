@@ -74,6 +74,18 @@ set_property(TARGET ComputerGraphics PROPERTY CXX_STANDARD 11)
 
 GroupSources(src)
 
+# Ensure that _AMD64_ or _X86_ are defined on Microsoft Windows, as otherwise
+# um/winnt.h provided since Windows 10.0.22000 will error.
+if (NOT UNIX)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        add_definitions(-D_AMD64_)
+        message(STATUS "64 bits detected")
+    elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        add_definitions(-D_X86_)
+        message(STATUS "32 bits detected")
+    endif()
+endif (NOT UNIX)
+
 # sdl2
 target_link_libraries(ComputerGraphics PRIVATE SDL2)
 target_link_libraries(ComputerGraphics PRIVATE SDL2main)
@@ -93,6 +105,7 @@ set_target_properties(ComputerGraphics PROPERTIES CXX_STANDARD_REQUIRED ON)
 message(STATUS "dir root: ${DIR_ROOT}")
 message(STATUS "bin root: ${CMAKE_BINARY_DIR}")
 
-COPY_FROM_TO_DIR(${DIR_ROOT}/res/meshes ${CMAKE_BINARY_DIR}/res/meshes)
-COPY_FROM_TO_DIR(${DIR_ROOT}/res/shaders ${CMAKE_BINARY_DIR}/res/shaders)
-COPY_FROM_TO_DIR(${DIR_ROOT}/res/textures ${CMAKE_BINARY_DIR}/res/textures)
+#COPY_FROM_TO_DIR(${DIR_ROOT}/res/meshes ${CMAKE_BINARY_DIR}/res/meshes)
+#COPY_FROM_TO_DIR(${DIR_ROOT}/res/shaders ${CMAKE_BINARY_DIR}/res/shaders)
+#COPY_FROM_TO_DIR(${DIR_ROOT}/res/textures ${CMAKE_BINARY_DIR}/res/textures)
+#COPY_FROM_TO_DIR(${DIR_ROOT}/res/images ${CMAKE_BINARY_DIR}/res/images)
