@@ -430,7 +430,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 		if (d <= 0) { //4
 			d = d + inc_E;
 			x = x - 1;
-			ye = ye - 1;
+			ye = ye - 1; //5
 		}
 		else {
 			d = d + inc_NE;
