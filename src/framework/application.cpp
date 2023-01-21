@@ -34,7 +34,6 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	//framebuffer.DrawLineBresenham(300, 200, 400, 500, Color(255, 0, 0));
 	framebuffer.Render();
 }
 
@@ -52,7 +51,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 	int mouse_y = lround(mouse_position.y);
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
-		case SDLK_l: framebuffer.DrawLineDDA(0, 0, mouse_x, mouse_y, Color(255, 0, 0)); break;
+		case SDLK_l: framebuffer.DrawLineDDA(mouse_x, mouse_y, mouse_x + 100, mouse_y + 50, Color(255, 0, 0)); break;
 		case SDLK_b: framebuffer.DrawLineBresenham(mouse_x, mouse_y, mouse_x + 100, mouse_y + 50, Color(255, 255, 255)); break;
 	}
 }
@@ -67,7 +66,7 @@ void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
 	if (event.button == SDL_BUTTON_LEFT) {
-		
+
 	}
 }
 

@@ -386,12 +386,12 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 	float d = std::max(abs(dx), abs(dy));
 	float vy = dx / d;
 	float vx = dy / d;
-	float x0f = x0;
-	float y0f = y0;
+	float x = x0;
+	float y = y0;
 	for (int i = 0; i < d; i++) {
-		x0f += vx;
-		y0f += vy;
-		SetPixel(x0f, y0f, c);
+		SetPixel(floor(x), floor(y), c);
+		x = x + vx;
+		y = y + vy;
 	}
 }
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
