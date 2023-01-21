@@ -380,12 +380,12 @@ void FloatImage::Resize(unsigned int width, unsigned int height)
 }
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 {
-	float dx, dy, x, y;
+	float dx, dy;
 	dx = x1 - x0;
 	dy = y1 - y0;
 	float d = std::max(abs(dx), abs(dy));
-	float vy = (float)dx / d;
-	float vx = (float)dy / d;
+	float vy = dx / d;
+	float vx = dy / d;
 	float x0f = x0;
 	float y0f = y0;
 	for (int i = 0; i < d; i++) {
@@ -397,7 +397,7 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 {
 	//first octant
-	int dx, dy, inc_E, inc_NE, d, x, y;
+	int dx, dy, inc_E, inc_NE, d, x, y, ye;
 	dx = x1 - x0;
 	dy = y1 - y0;
 	inc_E = 2 * dy;
@@ -405,11 +405,13 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 	d = 2 * dy - dx;
 	x = x0;
 	y = y0;
+	ye = y0;
 	SetPixel(x, y, c);
 	while (x < x1) {
-		if (d <= 0) {
+		if (d <= 0) { //1
 			d = d + inc_E;
 			x = x + 1;
+			ye = ye - 1; //8
 		}
 		else {
 			d = d + inc_NE;
@@ -417,17 +419,25 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 			y = y + 1;
 		}
 		SetPixel(x, y, c);
+		SetPixel(x, ye, c);
 	}
+	x1 = x1-2*dx;
+	x = x0;
+	y = y0;
+	ye = y0;
+	d= 2 * dy - dx;
 	while (x > x1) {
-		if (d <= 0) {
-			d = d - inc_E;
+		if (d <= 0) { //4
+			d = d + inc_E;
 			x = x - 1;
+			ye = ye - 1;
 		}
 		else {
-			d = d - inc_NE;
+			d = d + inc_NE;
 			x = x - 1;
-			y = y - 1;
+			y = y + 1;
 		}
 		SetPixel(x, y, c);
+		SetPixel(x, ye, c);
 	}
 }
