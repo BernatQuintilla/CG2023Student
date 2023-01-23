@@ -406,6 +406,8 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 	x = x0;
 	y = y0;
 	ye = y0;
+	/*xv =
+	yv =*/ 
 	SetPixel(x, y, c);
 	while (x < x1) {
 		if (d <= 0) { //1
@@ -418,8 +420,10 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 			x = x + 1;
 			y = y + 1;
 		}
-		SetPixel(x, y, c);
-		SetPixel(x, ye, c);
+		SetPixel(x, y, c);//1
+		SetPixel(x, ye, c);//8
+		SetPixel(x-0.707*(x-x0), y+0.293*(y-y0), c);//2
+		//SetPixel(x - 0.293 * (x - x0), ye - 0.707 * (ye - y0), c);//7
 	}
 	x1 = x1-2*dx;
 	x = x0;
@@ -437,8 +441,10 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 			x = x - 1;
 			y = y + 1;
 		}
-		SetPixel(x, y, c);
-		SetPixel(x, ye, c);
+		SetPixel(x, y, c);//4
+		SetPixel(x, ye, c);//5
+		//SetPixel(x - 0.293 * (x - x0), y + 0.707 * (y - y0), c);//3
+		//SetPixel(x + 0.707 * (x - x0), y - 0.293 * (y - y0), c);//6
 	}
 }
 void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
@@ -475,4 +481,7 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 			}
 		}
 	}
+}
+void Image::DrawImagePixels(const Image& image, int x, int y, bool top) {
+	//image.LoadPNG("images/toolbar.png", true);
 }

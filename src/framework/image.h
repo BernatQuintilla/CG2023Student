@@ -98,6 +98,16 @@ public:
 	void DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c);
 	//3.3 Bresenham circles
 	void DrawCircle(int x0,int y0, int r, const Color& c, bool fill);
+	//3.4 Create a drawing tool
+	void DrawImagePixels(const Image& image, int x, int y, bool top);
+	//3.5 Particle animation
+	typedef struct particleAnimation {
+		unsigned int x;
+		unsigned int y;
+		unsigned int size;
+		unsigned int v;
+	}particleAnimation;
+	particleAnimation A[200];
 };
 
 // Image storing one float per pixel instead of a 3 or 4 component Color
