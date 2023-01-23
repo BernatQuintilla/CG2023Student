@@ -96,6 +96,8 @@ public:
 	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
 	//3.2 Bresenham lines
 	void DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c);
+	//3.3 Bresenham circles
+	void DrawCircle(int x0,int y0, int r, const Color& c, bool fill);
 };
 
 // Image storing one float per pixel instead of a 3 or 4 component Color

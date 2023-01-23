@@ -441,3 +441,38 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 		SetPixel(x, ye, c);
 	}
 }
+void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
+	int x = 0, y = r;
+	int v = 1 - r;
+	while (y >= x) {
+		SetPixel(x0 + x, y0 + y, c);
+		SetPixel(x0 + y, y0 + x, c);
+		SetPixel(x0 - x, y0 + y, c);
+		SetPixel(x0 - y, y0 + x, c);
+		SetPixel(x0 + x, y0 - y, c);
+		SetPixel(x0 + y, y0 - x, c);
+		SetPixel(x0 - x, y0 - y, c);
+		SetPixel(x0 - y, y0 - x, c);
+		if (v < 0) {
+			v += 2 * x + 3;
+		}
+		else {
+			v += 2 * (x - y) + 5;
+			y--;
+		}
+		x++;
+		if (fill == true) {
+			for (int i = x0 - x;i <= x0 + x;i++){
+				SetPixel(i, y0 + y, c);
+				SetPixel(i, y0 - y, c);
+			}
+			for (int i = x0 - y;i <= x0 + y;i++) {
+				SetPixel(i, y0 + x, c);
+				SetPixel(i, y0 - x, c);
+			}
+			for (int i = x0 - r;i <= x0 + r;i++) { //Arreglo para pintar línea horizontal central del círculo
+				SetPixel(i, y0, c);
+			}
+		}
+	}
+}
