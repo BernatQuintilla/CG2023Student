@@ -397,7 +397,7 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 {
 	//first octant
-	int dx, dy, inc_E, inc_NE, d, x, y, ye;
+	int dx, dy, inc_E, inc_NE, d, x, y, ye, xv, yv, xve;
 	dx = x1 - x0;
 	dy = y1 - y0;
 	inc_E = 2 * dy;
@@ -406,45 +406,58 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 	x = x0;
 	y = y0;
 	ye = y0;
-	/*xv =
-	yv =*/ 
+	xv = x0;
+	yv = y0;
+	xve = x0;
 	SetPixel(x, y, c);
 	while (x < x1) {
 		if (d <= 0) { //1
 			d = d + inc_E;
 			x = x + 1;
-			ye = ye - 1; //8
+			yv = yv + 1;//2
+			ye = ye - 1;//8
+			xve = xve - 1;//3
 		}
 		else {
 			d = d + inc_NE;
 			x = x + 1;
 			y = y + 1;
+			yv = yv + 1;
+			xv = xv + 1;
 		}
 		SetPixel(x, y, c);//1
 		SetPixel(x, ye, c);//8
-		SetPixel(x-0.707*(x-x0), y+0.293*(y-y0), c);//2
-		//SetPixel(x - 0.293 * (x - x0), ye - 0.707 * (ye - y0), c);//7
+		SetPixel(xv, yv, c);//2
+		SetPixel(xve, yv, c);//3
+		
 	}
 	x1 = x1-2*dx;
 	x = x0;
 	y = y0;
 	ye = y0;
+	xv = x0;
+	yv = y0;
+	xve = x0;
 	d= 2 * dy - dx;
 	while (x > x1) {
 		if (d <= 0) { //4
 			d = d + inc_E;
 			x = x - 1;
+			yv = yv - 1;//7
 			ye = ye - 1; //5
+			xve = xve - 1;
 		}
 		else {
 			d = d + inc_NE;
 			x = x - 1;
 			y = y + 1;
+			yv = yv - 1;
+			xv = xv + 1;
 		}
 		SetPixel(x, y, c);//4
 		SetPixel(x, ye, c);//5
-		//SetPixel(x - 0.293 * (x - x0), y + 0.707 * (y - y0), c);//3
-		//SetPixel(x + 0.707 * (x - x0), y - 0.293 * (y - y0), c);//6
+		SetPixel(xv, yv, c);//7
+		SetPixel(xve, yv, c);//6
 	}
 }
 void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
