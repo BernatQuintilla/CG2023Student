@@ -80,21 +80,35 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 
 void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 {
+	int mouse_x = lround(mouse_position.x);
+	int mouse_y = lround(mouse_position.y);
 	if (event.button == SDL_BUTTON_LEFT) {
-
+		mouse_pressed.x = mouse_x;
+		mouse_pressed.y = mouse_y;
+	}
+	if (event.button == SDL_BUTTON_RIGHT) {
+		mouse_pressed.x = mouse_x;
+		mouse_pressed.y = mouse_y;
 	}
 }
 
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
+	int mouse_x = lround(mouse_position.x);
+	int mouse_y = lround(mouse_position.y);
 	if (event.button == SDL_BUTTON_LEFT) {
-
+		framebuffer.DrawLineBresenham(mouse_pressed.x, mouse_pressed.y, mouse_x, mouse_y, Color(255, 255, 255));
+	}
+	if (event.button == SDL_BUTTON_RIGHT) {
+		framebuffer.DrawLineDDA(mouse_pressed.x, mouse_pressed.y, mouse_x, mouse_y, Color(255, 255, 255));
 	}
 }
 
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-	
+	if (event.button == SDL_BUTTON_LEFT) {
+
+	}
 }
 
 void Application::OnFileChanged(const char* filename)
