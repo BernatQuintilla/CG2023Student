@@ -116,7 +116,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 					Init();
 				}
 				else if (mouse_x > 64 && mouse_x < 97) {
-					framebuffer.SaveTGA("images/file.tga");
+					framebuffer.SaveTGA("images/file.tga"); //Guardado de imagen sin funcionar
 				}
 
 			}break;
