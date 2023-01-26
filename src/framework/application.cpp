@@ -29,9 +29,12 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
+	tool.LoadPNG("images/toolbar.png");
+	framebuffer.DrawImagePixels(tool, 0, 0, true);
+
 	for (int i = 0; i < 200; i++) {
 		framebuffer.A[i].x = rand() % 1280;
-		framebuffer.A[i].y = rand() % 720;
+		framebuffer.A[i].y = rand() % 660;
 		framebuffer.A[i].v = 55 + rand() % (75 - 55);
 	}
 }

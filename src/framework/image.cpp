@@ -496,5 +496,32 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 	}
 }
 void Image::DrawImagePixels(const Image& image, int x, int y, bool top) {
-	//image.LoadPNG("images/toolbar.png", true);
+	//pasar pixeles de im a framebuffer
+	Image im = image;
+	Color c;
+	int cont;
+	int x_max = im.width;
+	int y_max = im.height;
+	if (top == true) {
+		for (int i = 0;i < x_max;i++) {
+			cont = 0;
+			for (int j = y_max;j > 0;j--) {
+				c = im.GetPixel(i, j);
+				SetPixel(i, height - cont, c);
+				cont++;
+			}
+		}
+	}
+	else {
+		if (y - im.height >= 0 && x <= height && y <= im.height && x <= im.width) {
+			for (int i = 0;i < x_max;i++) {
+				cont = 0;
+				for (int j = y_max;j > 0;j--) {
+					c = im.GetPixel(i, j);
+					SetPixel(i+x, y - cont, c);
+					cont++;
+				}
+			}
+		}
+	}
 }
