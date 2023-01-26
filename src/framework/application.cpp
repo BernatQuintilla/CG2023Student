@@ -112,6 +112,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 							framebuffer.SetPixel(i, j, Color(0, 0, 0));
 						}
 					}
+					c = Color(255, 255, 255); //Volvemos a color predeterminado
 					Init();
 				}
 				else if (mouse_x > 64 && mouse_x < 97) {
