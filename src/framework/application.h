@@ -37,6 +37,8 @@ public:
 	Image framebuffer;
 	// Tool Image
 	Image tool;
+	// Default Color 
+	Color c = Color(255, 255, 255);
 
 	// Constructor and main methods
 	Application(const char* caption, int width, int height);

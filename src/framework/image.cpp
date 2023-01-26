@@ -495,7 +495,7 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 		}
 	}
 }
-void Image::DrawImagePixels(const Image& image, int x, int y, bool top) {
+void Image::DrawImagePixels(const Image& image, bool top) {
 	//pasar pixeles de im a framebuffer
 	Image im = image;
 	Color c;
@@ -513,14 +513,10 @@ void Image::DrawImagePixels(const Image& image, int x, int y, bool top) {
 		}
 	}
 	else {
-		if (y - im.height >= 0 && x <= height && y <= im.height && x <= im.width) {
-			for (int i = 0;i < x_max;i++) {
-				cont = 0;
-				for (int j = y_max;j > 0;j--) {
-					c = im.GetPixel(i, j);
-					SetPixel(i+x, y - cont, c);
-					cont++;
-				}
+		for (int i = 0; i < x_max; i++) {
+			for (int j = 0; j < y_max; j++) {
+				c = im.GetPixel(i, j);
+				SetPixel(i, j, c);
 			}
 		}
 	}

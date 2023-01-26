@@ -99,7 +99,7 @@ public:
 	//3.3 Bresenham circles
 	void DrawCircle(int x0,int y0, int r, const Color& c, bool fill);
 	//3.4 Create a drawing tool
-	void DrawImagePixels(const Image& image, int x, int y, bool top);
+	void DrawImagePixels(const Image& image, bool top);
 	//3.5 Particle animation
 	typedef struct particleAnimation {
 		unsigned int x;
