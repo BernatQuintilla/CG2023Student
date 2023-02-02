@@ -2,6 +2,7 @@
 #include "mesh.h"
 #include "shader.h"
 #include "utils.h" 
+#include "entity.h"
 #include <cmath>
 #include <iostream>
 
@@ -29,6 +30,10 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
+	int matrix[4][4];
+	Mesh mesh = Mesh();
+	Entity* entity = new Entity(matrix,mesh);
+
 	tool.LoadPNG("images/toolbar.png");
 	framebuffer.DrawImagePixels(tool,true);
 
@@ -124,7 +129,6 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_b: framebuffer.DrawLineBresenham(mouse_x, mouse_y, mouse_x + 100, mouse_y + 60, c); break;
 		case SDLK_c: framebuffer.DrawCircle(mouse_x, mouse_y, 50, c, true); break;
 		case SDLK_x: framebuffer.DrawCircle(mouse_x, mouse_y, 50, c, false); break;
-		case SDLK_i: printf("%i", mouse_x);
 	}
 }
 

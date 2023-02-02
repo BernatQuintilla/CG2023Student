@@ -425,6 +425,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 			yv = yv + 1;
 			xv = xv + 1;
 		}
+
 		SetPixel(x, y, c);//1
 		SetPixel(x, ye, c);//8
 		SetPixel(xv, yv, c);//2
