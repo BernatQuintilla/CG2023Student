@@ -2,6 +2,7 @@
 #include "mesh.h"
 #include "shader.h"
 #include "utils.h" 
+#include "image.h"
 #include <cmath>
 #include <iostream>
 
@@ -47,4 +48,8 @@ int Entity::getModelMatrixValue(int r, int c) {
 }
 Mesh Entity::getMesh() {
 	return mesh;
+}
+//3.2
+void Render(Image* framebuffer, Camera* camera, const Color& c) {
+
 }

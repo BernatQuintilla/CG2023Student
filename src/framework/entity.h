@@ -20,4 +20,6 @@ public:
 	//Gets
 	int getModelMatrixValue(int r, int c);
 	Mesh getMesh();
+	//3.2
+	void Render(Image* framebuffer, Camera* camera, const Color& c);
 };
