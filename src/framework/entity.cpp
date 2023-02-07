@@ -50,6 +50,6 @@ Mesh Entity::getMesh() {
 	return mesh;
 }
 //3.2
-void Render(Image* framebuffer, Camera* camera, const Color& c) {
+/*void Render(Image* framebuffer, Camera* camera, const Color& c) {
 
-}
+}*/
