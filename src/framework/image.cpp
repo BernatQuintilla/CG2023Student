@@ -455,10 +455,20 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 	else {
 		inc_E = 2 * dx;
 		inc_NE = 2 * (dx - ay);
-		d = 2 * dx - ay;
+		d = 2 * (dx - ay);
 		while (y != fy) {
 			if (d > 0) {
 				d = d - inc_E;
+				if (dy < 0) {
+					y--;
+				}
+				else {
+					y++;
+				}
+			}
+			else {
+				d = d - inc_NE;
+				x++;
 				if (dy < 0) {
 					y--;
 				}
