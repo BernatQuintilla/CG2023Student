@@ -20,7 +20,6 @@ Application::Application(const char* caption, int width, int height)
 	this->keystate = SDL_GetKeyboardState(nullptr);
 	this->framebuffer.Resize(w, h);
 	this->camera = new Camera();
-	Matrix44 matrix;
 	Mesh mesh = Mesh();
 	mesh.LoadOBJ("meshes/lee.obj");
 

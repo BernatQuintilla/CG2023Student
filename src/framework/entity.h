@@ -43,5 +43,6 @@ public:
 		return mesh;
 	}
 	//3.2
-	void Render(Image* framebuffer, Camera* camera, const Color& c);
+	void PreRender(Image* framebuffer, Camera* camera, const Color& c);
+	void PreRender(Image* framebuffer, Camera* camera, const Color& c, std::vector<Vector3> vs);
 };

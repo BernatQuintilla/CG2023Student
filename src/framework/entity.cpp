@@ -7,7 +7,13 @@
 #include <iostream>
 
 //3.2
-void Render(Image* framebuffer, Camera* camera, const Color& c,std::vector<Vector3> vs) {
+void Render(Image* framebuffer, Camera* camera, const Color& c) {
+	vector<Vector3> vs = mesh->GetVertices();
+	PreRender(framebuffer, camera, c, vs);
+}
+
+
+void PreRender(Image* framebuffer, Camera* camera, const Color& c,std::vector<Vector3> vs) {
 	bool ib,jb,kb;
 	for (int i = 0;i < vs.size()-2;i+=3){
 		//local -> world
