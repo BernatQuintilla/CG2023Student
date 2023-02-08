@@ -76,6 +76,13 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 	}
 }
 
+void Application::OnWheel(SDL_MouseWheelEvent event)
+{
+	float dy = event.preciseY;
+
+	// ...
+}
+
 void Application::OnFileChanged(const char* filename)
 { 
 	Shader::ReloadSingleShader(filename);
