@@ -7,19 +7,41 @@ class Mesh;
 
 class Entity {
 public:
-	int modelMatrix[4][4];
+	Matrix44 modelMatrix;
 	Mesh mesh;
+	Color c;
 	//Constructors
-	Entity();
-	Entity(int matrix[4][4], Mesh obj);
-	Entity(int matrix[4][4]);
-	Entity(Mesh obj);
+	Entity() {
+		modelMatrix = NULL;
+		mesh = Mesh();
+		c = Color(255,255,255);
+	}
+	Entity(Matrix44 matrix, Mesh obj,Color co) {
+		modelMatrix = matrix;
+		mesh = obj;
+		c = co;
+	}
+	Entity(Matrix44 matrix,Color co) {
+		modelMatrix = matrix;
+		mesh = Mesh();
+		c = co;
+	}
+	Entity(Mesh obj, Color co) {
+		mesh = obj;
+		c = co;
+		modelMatrix = NULL;
+	}
 	//Sets
-	void setModelMatrix(int matrix[4][4]);
-	void setMesh(Mesh obj);
-	//Gets
-	int getModelMatrixValue(int r, int c);
-	Mesh getMesh();
+	void setModelMatrix(Matrix44 matrix) {
+		modelMatrix = matrix;
+	}
+	void setMesh(Mesh obj) {
+		mesh = obj;
+	}
+	
+	Mesh getMesh() {
+		return mesh;
+	}
 	//3.2
-	//void Render(Image* framebuffer, Camera* camera, const Color& c);
+	void Render(Image* framebuffer, Camera* camera, const Color& c);
 };

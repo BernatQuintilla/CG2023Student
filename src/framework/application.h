@@ -7,6 +7,7 @@
 #include "main/includes.h"
 #include "framework.h"
 #include "image.h"
+#include "camera.h"
 
 class Application
 {
@@ -17,7 +18,8 @@ public:
 	SDL_Window* window;
 	int window_width;
 	int window_height;
-
+	Entity* entity;
+	Camera* camera;
 	float time;
 
 	// Input

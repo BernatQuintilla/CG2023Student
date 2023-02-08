@@ -18,8 +18,13 @@ Application::Application(const char* caption, int width, int height)
 	this->window_width = w;
 	this->window_height = h;
 	this->keystate = SDL_GetKeyboardState(nullptr);
-
 	this->framebuffer.Resize(w, h);
+	this->camera = new Camera();
+	Matrix44 matrix;
+	Mesh mesh = Mesh();
+	mesh.LoadOBJ("meshes/lee.obj");
+
+	entity = new Entity(mesh,Color(255,0,0));
 }
 
 Application::~Application()
@@ -30,13 +35,10 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
-	int matrix[4][4];
-	Mesh mesh = Mesh();
-	Entity* entity = new Entity(matrix,mesh);
+	
 
 	tool.LoadPNG("images/toolbar.png");
 	framebuffer.DrawImagePixels(tool,true);
-
 	for (int i = 0; i < 200; i++) {
 		framebuffer.A[i].x = rand() % 1280;
 		framebuffer.A[i].y = rand() % 660;
@@ -48,19 +50,20 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	for (int i = 0; i < 200; i++) {
+	entity->Render(&framebuffer, camera, Color(255, 0, 0));
+	/*for (int i = 0; i < 200; i++) {
 		if (framebuffer.A[i].y == 0) {
 			framebuffer.SetPixel(framebuffer.A[i].x, framebuffer.A[i].y, Color(0, 0, 0));
 		}
 		framebuffer.SetPixel(framebuffer.A[i].x, framebuffer.A[i].y, Color(255, 255, 255));
 	}
-	framebuffer.Render();
+	framebuffer.Render();*/
 }
 
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-	for (int i = 0; i < 200; i++) {
+	/*for (int i = 0; i < 200; i++) {
 		framebuffer.SetPixel(framebuffer.A[i].x, framebuffer.A[i].y, Color(0, 0, 0));
 		if (framebuffer.A[i].x + framebuffer.A[i].v * seconds_elapsed < 1280){
 			if ((framebuffer.A[i].x % 2) == 0) {
@@ -73,7 +76,7 @@ void Application::Update(float seconds_elapsed)
 		if (framebuffer.A[i].y - framebuffer.A[i].v * seconds_elapsed > 0) {
 			framebuffer.A[i].y -= framebuffer.A[i].v * seconds_elapsed;
 		}
-	}
+	}*/
 }
 
 //keyboard press event 
