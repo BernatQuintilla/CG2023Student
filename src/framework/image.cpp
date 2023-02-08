@@ -404,7 +404,7 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 	float x = x0;
 	float y = y0;
 	for (int i = 0; i < d; i++) {
-		SetPixel(floor(x), floor(y), c);
+		SetPixelSafe(floor(x), floor(y), c);
 		x = x + vx;
 		y = y + vy;
 	}
@@ -429,7 +429,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 	y = sy;
 	ay = dy;
 	ay = abs(ay);
-	SetPixel(x, y, c);
+	SetPixelSafe(x, y, c);
 	if (dx > ay) {
 		inc_E = 2 * ay;
 		inc_NE = 2 * (ay - dx);
@@ -449,7 +449,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 					y++;
 				}
 			}
-			SetPixel(x, y, c);
+			SetPixelSafe(x, y, c);
 		}
 	}
 	else {
@@ -476,7 +476,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 					y++;
 				}
 			}
-			SetPixel(x, y, c);
+			SetPixelSafe(x, y, c);
 		}
 	}
 }
@@ -484,14 +484,14 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 	int x = 0, y = r;
 	int v = 1 - r;
 	while (y >= x) {
-		SetPixel(x0 + x, y0 + y, c);
-		SetPixel(x0 + y, y0 + x, c);
-		SetPixel(x0 - x, y0 + y, c);
-		SetPixel(x0 - y, y0 + x, c);
-		SetPixel(x0 + x, y0 - y, c);
-		SetPixel(x0 + y, y0 - x, c);
-		SetPixel(x0 - x, y0 - y, c);
-		SetPixel(x0 - y, y0 - x, c);
+		SetPixelSafe(x0 + x, y0 + y, c);
+		SetPixelSafe(x0 + y, y0 + x, c);
+		SetPixelSafe(x0 - x, y0 + y, c);
+		SetPixelSafe(x0 - y, y0 + x, c);
+		SetPixelSafe(x0 + x, y0 - y, c);
+		SetPixelSafe(x0 + y, y0 - x, c);
+		SetPixelSafe(x0 - x, y0 - y, c);
+		SetPixelSafe(x0 - y, y0 - x, c);
 		if (v < 0) {
 			v += 2 * x + 3;
 		}
@@ -502,15 +502,15 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 		x++;
 		if (fill == true) {
 			for (int i = x0 - x;i <= x0 + x;i++){
-				SetPixel(i, y0 + y, c);
-				SetPixel(i, y0 - y, c);
+				SetPixelSafe(i, y0 + y, c);
+				SetPixelSafe(i, y0 - y, c);
 			}
 			for (int i = x0 - y;i <= x0 + y;i++) {
-				SetPixel(i, y0 + x, c);
-				SetPixel(i, y0 - x, c);
+				SetPixelSafe(i, y0 + x, c);
+				SetPixelSafe(i, y0 - x, c);
 			}
 			for (int i = x0 - r;i <= x0 + r;i++) { //Arreglo para pintar línea horizontal central del círculo
-				SetPixel(i, y0, c);
+				SetPixelSafe(i, y0, c);
 			}
 		}
 	}
@@ -526,8 +526,8 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 		for (int i = 0;i < x_max;i++) {
 			cont = 0;
 			for (int j = y_max;j > 0;j--) {
-				c = im.GetPixel(i, j);
-				SetPixel(i, height - cont, c);
+				c = im.GetPixelSafe(i, j);
+				SetPixelSafe(i, height - cont, c);
 				cont++;
 			}
 		}
@@ -535,8 +535,8 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 	else {
 		for (int i = 0; i < x_max; i++) {
 			for (int j = 0; j < y_max; j++) {
-				c = im.GetPixel(i, j);
-				SetPixel(i, j, c);
+				c = im.GetPixelSafe(i, j);
+				SetPixelSafe(i, j, c);
 			}
 		}
 	}

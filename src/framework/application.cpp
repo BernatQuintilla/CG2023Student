@@ -39,9 +39,8 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	framebuffer.SetPixel(255, 255, c);
-	framebuffer.DrawLineBresenham(0, 100, 0, 100, c);
 	entity->Render(&framebuffer, camera, c);
+	framebuffer.Render();
 }
 
 // Called after render
