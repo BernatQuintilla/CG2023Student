@@ -3,6 +3,8 @@
 #include "main/includes.h"
 #include "framework.h"
 #include "mesh.h"
+#include "image.h"
+
 class Mesh;
 
 class Entity {
@@ -12,7 +14,7 @@ public:
 	Color c;
 	//Constructors
 	Entity() {
-		modelMatrix = NULL;
+		modelMatrix = Matrix44();
 		mesh = Mesh();
 		c = Color(255,255,255);
 	}
@@ -29,7 +31,7 @@ public:
 	Entity(Mesh obj, Color co) {
 		mesh = obj;
 		c = co;
-		modelMatrix = NULL;
+		modelMatrix = Matrix44();
 	}
 	//Sets
 	void setModelMatrix(Matrix44 matrix) {
@@ -43,6 +45,6 @@ public:
 		return mesh;
 	}
 	//3.2
-	void PreRender(Image* framebuffer, Camera* camera, const Color& c);
-	void PreRender(Image* framebuffer, Camera* camera, const Color& c, std::vector<Vector3> vs);
+	void Render(Image* framebuffer, Camera* camera, const Color& c);
+	void Wireframe(Image* framebuffer, Camera* camera, const Color& c, std::vector<Vector3> vs);
 };
