@@ -20,11 +20,12 @@ Application::Application(const char* caption, int width, int height)
 	this->keystate = SDL_GetKeyboardState(nullptr);
 	this->framebuffer.Resize(w, h);
 	this->camera = new Camera();
-	this->camera->fov = 45;
+	this->camera->fov = 100;
 	this->camera->near_plane = 0.01;
 	this->camera->far_plane = 100;
+	this->camera->aspect = framebuffer.width / framebuffer.height;
 	this->camera->type = 0;
-	//this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+	this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
 	Mesh mesh1 = Mesh();
 	Mesh mesh2 = Mesh();
 	Mesh mesh3 = Mesh();
@@ -88,6 +89,8 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
 		case SDLK_o: camera->type = 1; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetOrthographic(camera->left, camera->right, camera->top, camera->bottom, camera->near_plane, camera->far_plane); break;
 		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); break;
+		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
+		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 	}
 }
 
@@ -116,8 +119,7 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
 	if (event.button == SDL_BUTTON_LEFT) {
-		camera->eye.v[0] += (mouse_delta.x);
-		camera->eye.v[1] += (mouse_delta.y);
+		
 	}
 }
 
@@ -125,10 +127,34 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 {
 	float dy = event.preciseY;
 	if (dy > 0) {
-		camera->eye.v[2] += 100;
+		if (camera->type == 0) {
+			if (camera->fov > 58) {
+				framebuffer.Fill(Color(0, 0, 0));
+				camera->SetPerspective(camera->fov-3, camera->aspect, camera->near_plane, camera->far_plane);
+				SetWindowSize(framebuffer.width, framebuffer.height);
+			}
+		}else if(camera->type == 1){
+			if (camera->near_plane > -35) {
+				framebuffer.Fill(Color(0, 0, 0));
+				camera->SetOrthographic(camera->left, camera->right, camera->top, camera->bottom, camera->near_plane - 0.4, camera->far_plane - 1);
+				SetWindowSize(framebuffer.width, framebuffer.height);
+			
+			}
+		}
 	}
 	else if(dy<0){
-		camera->eye.v[2] += 100;
+		if (camera->type == 0) {
+			if (camera->fov < 169) {
+				framebuffer.Fill(Color(0, 0, 0));
+				camera->SetPerspective(camera->fov + 3, camera->aspect, camera->near_plane, camera->far_plane);
+				SetWindowSize(framebuffer.width, framebuffer.height);
+			}
+		}
+		else if (camera->type == 1) {
+			framebuffer.Fill(Color(0, 0, 0));
+			camera->SetOrthographic(camera->left, camera->right, camera->top, camera->bottom, camera->near_plane + 0.4, camera->far_plane + 1);
+			SetWindowSize(framebuffer.width, framebuffer.height);
+		}
 	}
 }
 
