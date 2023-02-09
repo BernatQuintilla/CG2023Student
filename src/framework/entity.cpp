@@ -26,15 +26,15 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 		Vector3 v_clip_j = camera->ProjectVector(v_world_j,jb);
 		Vector3 v_clip_k = camera->ProjectVector(v_world_k, kb);
 
-		//from clip to screen
-		v_clip_i.x = (v_clip_i.x+1)/2 * framebuffer->width;
-		v_clip_i.y = (v_clip_i.y + 1) / 2 * framebuffer->height;
+		//from clip to screen (centramos mesh en el framebuffer -> convert range from [-1,1] to [(0,w-1),(0,h-1)])
+		v_clip_i.x = (v_clip_i.x+1) / 2 * framebuffer->width;
+		v_clip_i.y = (v_clip_i.y+1) / 2 * framebuffer->height;
 		v_clip_j.x = (v_clip_j.x+1) / 2 * framebuffer->width;
-		v_clip_j.y = (v_clip_j.y + 1) / 2 * framebuffer->height;
-		v_clip_k.x = (v_clip_k.x + 1) / 2 * framebuffer->width;
-		v_clip_k.y = (v_clip_k.y + 1) / 2 * framebuffer->height;
+		v_clip_j.y = (v_clip_j.y+1) / 2 * framebuffer->height;
+		v_clip_k.x = (v_clip_k.x+1) / 2 * framebuffer->width;
+		v_clip_k.y = (v_clip_k.y+1) / 2 * framebuffer->height;
 		
-		if (!(ib || jb || kb)) { //negZ
+		if ((ib || jb || kb)==false) { //negZ
 			framebuffer->DrawLineBresenham(floor(v_clip_i.x), floor(v_clip_i.y), floor(v_clip_j.x), floor(v_clip_j.y), c);
 			framebuffer->DrawLineBresenham(floor(v_clip_j.x), floor(v_clip_j.y), floor(v_clip_k.x), floor(v_clip_k.y), c);
 			framebuffer->DrawLineBresenham(floor(v_clip_k.x), floor(v_clip_k.y), floor(v_clip_i.x), floor(v_clip_i.y), c);
@@ -43,9 +43,5 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 }
 
 void Entity::Update(float seconds_elapsed) {
-	Matrix44 rotation_matrix;
-	rotation_matrix.GetRotationOnly();
-	for (int i = 0; i < mesh.vertices.size() - 2; i += 3) {
-		mesh.vertices[i] = rotation_matrix.RotateVector(mesh.vertices[i]);
-	}
+	modelMatrix.RotateLocal(0.03, (0,1,0));
 }

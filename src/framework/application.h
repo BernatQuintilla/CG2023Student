@@ -21,6 +21,7 @@ public:
 	Entity* entity1;
 	Entity* entity2;
 	Entity* entity3;
+	Vector3 up1 = Vector3(0, 1, 0), up2 = Vector3(0.5, 1, 0),  up3 = Vector3(0.5,-1,0);
 	Camera* camera;
 	float time;
 
