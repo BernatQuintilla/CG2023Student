@@ -23,12 +23,21 @@ Application::Application(const char* caption, int width, int height)
 	Mesh mesh1 = Mesh();
 	Mesh mesh2 = Mesh();
 	Mesh mesh3 = Mesh();
-	mesh1.LoadOBJ("meshes/anna.obj");
-	mesh2.LoadOBJ("meshes/lee.obj");
+	mesh1.LoadOBJ("meshes/lee.obj");
+	mesh2.LoadOBJ("meshes/anna.obj");
 	mesh3.LoadOBJ("meshes/cleo.obj");
+
 	entity1 = new Entity(mesh1, c); 
 	entity2 = new Entity(mesh2, Color(255,0,0));
 	entity3 = new Entity(mesh3, Color(0, 0, 255));
+
+	entity2->modelMatrix.TranslateLocal(-0.55, -0.2, 0);
+	Vector3 v2 = Vector3(0, -0.5, 0);
+	entity2->modelMatrix.RotateLocal(1, v2);
+
+	entity3->modelMatrix.TranslateLocal(0.55, -0.2, 0);
+	Vector3 v3 = Vector3(0, 0.5, 0);
+	entity3->modelMatrix.RotateLocal(1, v3);
 }
 
 Application::~Application()

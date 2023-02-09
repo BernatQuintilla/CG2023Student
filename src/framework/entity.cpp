@@ -16,17 +16,17 @@ void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
 void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::vector<Vector3> vs) {
 	bool ib,jb,kb;
 	for (int i = 0;i < vs.size()-2;i+=3){
-		//local -> world
+		//from local to world
 		Vector3 v_world_i = modelMatrix * vs[i];
 		Vector3 v_world_j = modelMatrix * vs[i+1];
 		Vector3 v_world_k = modelMatrix * vs[i+2];
 		
-		//world->clip
+		//from world to clip
 		Vector3 v_clip_i = camera->ProjectVector(v_world_i, ib);
 		Vector3 v_clip_j = camera->ProjectVector(v_world_j,jb);
 		Vector3 v_clip_k = camera->ProjectVector(v_world_k, kb);
 
-		//clip->screen
+		//from clip to screen
 		v_clip_i.x = (v_clip_i.x+1)/2 * framebuffer->width;
 		v_clip_i.y = (v_clip_i.y + 1) / 2 * framebuffer->height;
 		v_clip_j.x = (v_clip_j.x+1) / 2 * framebuffer->width;
@@ -34,7 +34,7 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 		v_clip_k.x = (v_clip_k.x + 1) / 2 * framebuffer->width;
 		v_clip_k.y = (v_clip_k.y + 1) / 2 * framebuffer->height;
 		
-		if (!(ib || jb || kb)) {
+		if (!(ib || jb || kb)) { //negZ
 			framebuffer->DrawLineBresenham(floor(v_clip_i.x), floor(v_clip_i.y), floor(v_clip_j.x), floor(v_clip_j.y), c);
 			framebuffer->DrawLineBresenham(floor(v_clip_j.x), floor(v_clip_j.y), floor(v_clip_k.x), floor(v_clip_k.y), c);
 			framebuffer->DrawLineBresenham(floor(v_clip_k.x), floor(v_clip_k.y), floor(v_clip_i.x), floor(v_clip_i.y), c);
