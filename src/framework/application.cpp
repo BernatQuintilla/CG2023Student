@@ -57,6 +57,7 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
+	printf("type of projection: Perspective\n");
 }
 
 // Render one frame
@@ -87,8 +88,8 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
-		case SDLK_o: camera->type = 1; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetOrthographic(camera->left, camera->right, camera->top, camera->bottom, camera->near_plane, camera->far_plane); break;
-		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); break;
+		case SDLK_o: camera->type = 1; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetOrthographic(camera->left, camera->right, camera->top, camera->bottom, camera->near_plane, camera->far_plane); printf("type of projection: Orthographic\n"); break;
+		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); printf("type of projection: Perspective\n"); break;
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 	}
@@ -109,9 +110,25 @@ void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 	int mouse_x = lround(mouse_position.x);
 	int mouse_y = lround(mouse_position.y);
 	if (event.button == SDL_BUTTON_LEFT) {
-		camera->eye.v[0] += (mouse_x - mouse_pressed.x);
-		camera->eye.v[1] += (mouse_y - mouse_pressed.y);
-		/*camera->center.v[0] += (mouse_x - mouse_pressed.x);
+		/*if (camera->type == 0) {
+			if (mouse_x - mouse_pressed.x < mouse_x) {
+				camera->right += (mouse_x - mouse_pressed.x);
+				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+			}
+			else if (mouse_x - mouse_pressed.x > mouse_x) {
+				camera->left += (mouse_x - mouse_pressed.x);
+				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+			}
+			if (mouse_y - mouse_pressed.y < mouse_y) {
+				camera->top += (mouse_y - mouse_pressed.y);
+				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+			}
+			else if (mouse_y - mouse_pressed.y > mouse_y) {
+				camera->bottom += (mouse_y - mouse_pressed.y);
+				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+			}
+		}
+		camera->center.v[0] += (mouse_x - mouse_pressed.x);
 		camera->center.v[1] += (mouse_y - mouse_pressed.y);*/
 	}
 }
