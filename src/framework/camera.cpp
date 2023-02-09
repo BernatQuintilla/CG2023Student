@@ -2,6 +2,7 @@
 
 #include "main/includes.h"
 #include <iostream>
+#include <math.h>
 
 Camera::Camera()
 {
@@ -84,18 +85,26 @@ void Camera::UpdateViewMatrix()
 	view_matrix.SetIdentity();
 
 	// Comment this line to create your own projection matrix!
-	SetExampleViewMatrix();
+	//SetExampleViewMatrix();
 
 	// Remember how to fill a Matrix4x4 (check framework slides)
 	// Careful with the order of matrix multiplications, and be sure to use normalized vectors!
 	
 	// Create the view matrix rotation
-	// ...
-	// view_matrix.M[3][3] = 1.0;
-
+	Vector3 front = center - eye;
+	front = front.Normalize();
+	Vector3 side = front.Cross(up);
+	side = side.Normalize();
+	Vector3 top = side.Cross(front);
+	Matrix44 aux;
+	aux.M[0][0] = side.x; aux.M[0][1] = top.x; aux.M[0][2] = -front.x; aux.M[0][3] = 0;
+	aux.M[1][0] = side.y; aux.M[1][1] = top.y; aux.M[1][2] = -front.y; aux.M[1][3] = 0;
+	aux.M[2][0] = side.z; aux.M[2][1] = top.z; aux.M[2][2] = -front.z; aux.M[2][3] = 0;
+	aux.M[3][0] = 0; aux.M[3][1] = 0; aux.M[3][2] = 0; aux.M[3][3] = 1;
 	// Translate view matrix
-	// ...
+	aux.TranslateLocal(-eye.x, -eye.y, -eye.z);
 
+	view_matrix.SetMatrix(aux);
 	UpdateViewProjectionMatrix();
 }
 
@@ -106,16 +115,23 @@ void Camera::UpdateProjectionMatrix()
 	projection_matrix.SetIdentity();
 
 	// Comment this line to create your own projection matrix!
-	SetExampleProjectionMatrix();
-
-	// Remember how to fill a Matrix4x4 (check framework slides)
-	
+	//SetExampleProjectionMatrix();
+	Matrix44 aux;
+	float f = 1 / tan(fov / 2);
 	if (type == PERSPECTIVE) {
 		// projection_matrix.M[2][3] = -1;
-		// ...
+		aux.M[0][0] = f/aspect; aux.M[0][1] = 0; aux.M[0][2] = 0; aux.M[0][3] = 0;
+		aux.M[1][0] = 0; aux.M[1][1] = f; aux.M[1][2] = 0; aux.M[1][3] = 0;
+		aux.M[2][0] = 0; aux.M[2][1] = 0; aux.M[2][2] = (far_plane+near_plane)/(near_plane-far_plane); aux.M[2][3] = -1;
+		aux.M[3][0] = 0; aux.M[3][1] = 0; aux.M[3][2] = 2*((far_plane * near_plane) / (near_plane - far_plane)); aux.M[3][3] = 0;
+		projection_matrix.SetMatrix(aux);
 	}
 	else if (type == ORTHOGRAPHIC) {
-		// ...
+		aux.M[0][0] = 2/(right-left); aux.M[0][1] = 0; aux.M[0][2] = 0; aux.M[0][3] = -((right+left)/(right-left));
+		aux.M[1][0] = 0; aux.M[1][1] = 2/(top-bottom); aux.M[1][2] = 0; aux.M[1][3] = -((top+bottom)/(top-bottom));
+		aux.M[2][0] = 0; aux.M[2][1] = 0; aux.M[2][2] = -2/(far_plane-near_plane); aux.M[2][3] = -((far_plane+near_plane)/(far_plane-near_plane));
+		aux.M[3][0] = 0; aux.M[3][1] = 0; aux.M[3][2] = 0; aux.M[3][3] = 1;
+		projection_matrix.SetMatrix(aux);
 	} 
 
 	UpdateViewProjectionMatrix();

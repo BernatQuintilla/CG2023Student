@@ -133,6 +133,7 @@ class Matrix44
 		Matrix44(const float* v);
 
 		void Set(); // Multiply with opengl matrix
+		void SetMatrix(Matrix44 mat); //Sets a new matrix
 		void Load(); // Load in opengl matrix
 		void Clear();
 		void SetIdentity();

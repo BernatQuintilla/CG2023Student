@@ -19,6 +19,7 @@ public:
 	int window_width;
 	int window_height;
 	Entity* entity;
+	Entity* entity2;
 	Camera* camera;
 	float time;
 
