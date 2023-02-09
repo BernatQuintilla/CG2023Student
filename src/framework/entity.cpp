@@ -41,3 +41,11 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 		}
 	}
 }
+
+void Entity::Update(float seconds_elapsed) {
+	Matrix44 rotation_matrix;
+	rotation_matrix.GetRotationOnly();
+	for (int i = 0; i < mesh.vertices.size() - 2; i += 3) {
+		mesh.vertices[i] = rotation_matrix.RotateVector(mesh.vertices[i]);
+	}
+}

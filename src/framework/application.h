@@ -18,7 +18,9 @@ public:
 	SDL_Window* window;
 	int window_width;
 	int window_height;
-	Entity* entity;
+	Entity* entity1;
+	Entity* entity2;
+	Entity* entity3;
 	Camera* camera;
 	float time;
 

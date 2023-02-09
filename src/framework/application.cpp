@@ -20,10 +20,15 @@ Application::Application(const char* caption, int width, int height)
 	this->keystate = SDL_GetKeyboardState(nullptr);
 	this->framebuffer.Resize(w, h);
 	this->camera = new Camera();
-
-	Mesh mesh = Mesh();
-	mesh.LoadOBJ("meshes/lee.obj");
-	entity = new Entity(mesh, c); 
+	Mesh mesh1 = Mesh();
+	Mesh mesh2 = Mesh();
+	Mesh mesh3 = Mesh();
+	mesh1.LoadOBJ("meshes/anna.obj");
+	mesh2.LoadOBJ("meshes/lee.obj");
+	mesh3.LoadOBJ("meshes/cleo.obj");
+	entity1 = new Entity(mesh1, c); 
+	entity2 = new Entity(mesh2, Color(255,0,0));
+	entity3 = new Entity(mesh3, Color(0, 0, 255));
 }
 
 Application::~Application()
@@ -34,19 +39,21 @@ Application::~Application()
 void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
+	entity1->Render(&framebuffer, camera, entity1->c);
+	entity2->Render(&framebuffer, camera, entity2->c);
+	entity3->Render(&framebuffer, camera, entity3->c);
 }
 
 // Render one frame
 void Application::Render(void)
 {
-	entity->Render(&framebuffer, camera, c);
 	framebuffer.Render();
 }
 
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-	
+
 }
 
 //keyboard press event 
