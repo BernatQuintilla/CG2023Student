@@ -117,7 +117,8 @@ void Camera::UpdateProjectionMatrix()
 	// Comment this line to create your own projection matrix!
 	//SetExampleProjectionMatrix();
 	Matrix44 aux;
-	float f = 1 / tan(fov / 2);
+	//Grados * PI / 180
+	float f = 1 / tan(((fov*M_PI)/180) / 2);
 	if (type == PERSPECTIVE) {
 		// projection_matrix.M[2][3] = -1;
 		aux.M[0][0] = f/aspect; aux.M[0][1] = 0; aux.M[0][2] = 0; aux.M[0][3] = 0;
