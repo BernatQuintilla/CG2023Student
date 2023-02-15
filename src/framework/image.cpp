@@ -541,3 +541,55 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 		}
 	}
 }
+
+
+bool Image::estaEnRecta(int x0, int y0, int x1, int y1, int a, int b) {
+	double m = (double)(y1 - y0) / (double)(x1 - x0);
+	double y = m * (a - x1) + y1;
+	return abs(b - y) < 0.0001;
+}
+
+void Image::GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector) {
+	bool flag;
+	for (int i = 0; i < height; i++) {
+		flag = false;
+		for (int j = 0; j < width; j++) {
+			if (estaEnRecta(p0.x, p0.y, p1.x, p1.y, j, i) == true) {
+				if (flag == false) {
+					vector[i].minx = j;
+				}
+				else {
+					vector[i].maxx = j;
+				}
+			}
+			if (estaEnRecta(p1.x, p1.y, p2.x, p2.y, j, i) == true) {
+				if (flag == false) {
+					vector[i].minx = j;
+				}
+				else {
+					vector[i].maxx = j;
+				}
+			}
+			if (estaEnRecta(p2.x, p2.y, p0.x, p0.y, j, i) == true) {
+				if (flag == false) {
+					vector[i].minx = j;
+				}
+				else {
+					vector[i].maxx = j;
+				}
+			}
+		}
+	}
+
+}
+
+void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& color) {
+	// 1 crear tabla
+	std::vector<myCell> vector_cell(height);
+	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
+	GetTrianglePoints(p0, p1, p2, vector_cell);
+	//3 pintar lineas horizontales que representan cada punto
+	for (int i = 0; i < height; i++) {
+		DrawLineBresenham(vector_cell[i].minx, i, vector_cell[i].maxx, i, color);
+	}
+}

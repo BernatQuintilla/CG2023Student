@@ -39,6 +39,10 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 			framebuffer->DrawLineBresenham(floor(v_clip_j.x), floor(v_clip_j.y), floor(v_clip_k.x), floor(v_clip_k.y), c);
 			framebuffer->DrawLineBresenham(floor(v_clip_k.x), floor(v_clip_k.y), floor(v_clip_i.x), floor(v_clip_i.y), c);
 		}
+		Vector2 v0(v_clip_i.x, v_clip_i.y);
+		Vector2 v1(v_clip_j.x, v_clip_j.y);
+		Vector2 v2(v_clip_k.x, v_clip_k.y);
+		framebuffer->DrawTriangle(v0, v1, v2, c);
 	}
 }
 

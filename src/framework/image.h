@@ -110,6 +110,14 @@ public:
 		unsigned int v;
 	}particleAnimation;
 	particleAnimation A[200];
+	//3.1
+	void DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& color);
+	typedef struct myCell {
+		int minx;
+		int maxx;
+	}myCell;
+	bool estaEnRecta(int x0, int y0, int x1, int y1, int a, int b);
+	void GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector);
 };
 
 // Image storing one float per pixel instead of a 3 or 4 component Color
