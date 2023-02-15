@@ -116,7 +116,7 @@ public:
 		int minx;
 		int maxx;
 	}myCell;
-	bool estaEnRecta(int x0, int y0, int x1, int y1, int a, int b);
+	void ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell> vector);
 	void GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector);
 };
 

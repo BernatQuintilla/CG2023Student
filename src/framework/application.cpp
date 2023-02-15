@@ -64,8 +64,8 @@ void Application::Init(void)
 void Application::Render(void)
 {
 	entity1->Render(&framebuffer, camera, entity1->c);
-	entity2->Render(&framebuffer, camera, entity2->c);
-	entity3->Render(&framebuffer, camera, entity3->c);
+	/*entity2->Render(&framebuffer, camera, entity2->c);
+	entity3->Render(&framebuffer, camera, entity3->c);*/
 	framebuffer.Render();
 }
 
@@ -75,11 +75,11 @@ void Application::Update(float seconds_elapsed)
 	entity1->Render(&framebuffer, camera, Color(0, 0, 0));
 	entity1->modelMatrix.RotateLocal(0.03, up1);
 
-	entity2->Render(&framebuffer, camera, Color(0, 0, 0));
+	/*entity2->Render(&framebuffer, camera, Color(0, 0, 0));
 	entity2->modelMatrix.RotateLocal(0.03, up2);
 
 	entity3->Render(&framebuffer, camera, Color(0, 0, 0));
-	entity3->modelMatrix.RotateLocal(0.03, up3);
+	entity3->modelMatrix.RotateLocal(0.03, up3);*/
 }
 
 //keyboard press event 

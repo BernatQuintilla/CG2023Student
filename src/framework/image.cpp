@@ -543,51 +543,87 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 }
 
 
-bool Image::estaEnRecta(int x0, int y0, int x1, int y1, int a, int b) {
-	double m = (double)(y1 - y0) / (double)(x1 - x0);
-	double y = m * (a - x1) + y1;
-	return abs(b - y) < 0.0001;
-}
+void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell> vector)
+{
+	float inc_E, inc_NE, dx, dy, d, ay;
+	int x, y, sx, sy, fx, fy;
+	sx = x0;
+	sy = y0;
+	fx = x1;
+	fy = y1;
+	if (x0 > x1) {
+		sx = x1;
+		sy = y1;
+		fx = x0;
+		fy = y0;
+	}
+	dx = fx - sx;
+	dy = fy - sy;
+	x = sx;
+	y = sy;
+	ay = dy;
+	ay = abs(ay);
+	//SetPixelSafe(x, y, c);   si x esta entre x0 i x1 de dos vectors i esta entre y0 i y1 de dos vectors llavors esta dins del triangle nomes tenint en compte x
 
-void Image::GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector) {
-	bool flag;
-	for (int i = 0; i < height; i++) {
-		flag = false;
-		for (int j = 0; j < width; j++) {
-			if (estaEnRecta(p0.x, p0.y, p1.x, p1.y, j, i) == true) {
-				if (flag == false) {
-					vector[i].minx = j;
+	if (dx > ay) {
+		inc_E = 2 * ay;
+		inc_NE = 2 * (ay - dx);
+		d = 2 * ay - dx;
+		while (fx > x) {
+			if (d <= 0) {
+				d = d + inc_E;
+				x++;
+			}
+			else {
+				d = d + inc_NE;
+				x++;
+				if (dy < 0) {
+					y--;
 				}
 				else {
-					vector[i].maxx = j;
+					y++;
 				}
 			}
-			if (estaEnRecta(p1.x, p1.y, p2.x, p2.y, j, i) == true) {
-				if (flag == false) {
-					vector[i].minx = j;
-				}
-				else {
-					vector[i].maxx = j;
-				}
-			}
-			if (estaEnRecta(p2.x, p2.y, p0.x, p0.y, j, i) == true) {
-				if (flag == false) {
-					vector[i].minx = j;
-				}
-				else {
-					vector[i].maxx = j;
-				}
-			}
+			//SetPixelSafe(x, y, c);
 		}
 	}
-
+	else {
+		inc_E = 2 * dx;
+		inc_NE = 2 * (dx - ay);
+		d = 2 * (dx - ay);
+		while (y != fy) {
+			if (d > 0) {
+				d = d - inc_E;
+				if (dy < 0) {
+					y--;
+				}
+				else {
+					y++;
+				}
+			}
+			else {
+				d = d - inc_NE;
+				x++;
+				if (dy < 0) {
+					y--;
+				}
+				else {
+					y++;
+				}
+			}
+			//SetPixelSafe(x, y, c);
+		}
+	}
 }
+
 
 void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& color) {
 	// 1 crear tabla
 	std::vector<myCell> vector_cell(height);
 	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
-	GetTrianglePoints(p0, p1, p2, vector_cell);
+	for (int i = 0; i < height; i++) {
+		ScanLineBresenham(0, 0, width, i);
+	}
 	//3 pintar lineas horizontales que representan cada punto
 	for (int i = 0; i < height; i++) {
 		DrawLineBresenham(vector_cell[i].minx, i, vector_cell[i].maxx, i, color);
