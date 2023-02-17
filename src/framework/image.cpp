@@ -543,7 +543,7 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 }
 
 
-void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell> vector)
+void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell>& vector)
 {
 	float inc_E, inc_NE, dx, dy, d, ay;
 	int x, y, sx, sy, fx, fy;
@@ -563,8 +563,10 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 	y = sy;
 	ay = dy;
 	ay = abs(ay);
-	//SetPixelSafe(x, y, c);   si x esta entre x0 i x1 de dos vectors i esta entre y0 i y1 de dos vectors llavors esta dins del triangle nomes tenint en compte x
 
+	vector[y].minx = std::min(vector[y].minx, x);
+	vector[y].maxx = std::max(vector[y].maxx, x);
+	
 	if (dx > ay) {
 		inc_E = 2 * ay;
 		inc_NE = 2 * (ay - dx);
@@ -584,7 +586,8 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 					y++;
 				}
 			}
-			//SetPixelSafe(x, y, c);
+			vector[y].minx = std::min(vector[y].minx, x);
+			vector[y].maxx = std::max(vector[y].maxx, x);
 		}
 	}
 	else {
@@ -611,21 +614,44 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 					y++;
 				}
 			}
-			//SetPixelSafe(x, y, c);
+			vector[y].minx = std::min(vector[y].minx, x);
+			vector[y].maxx = std::max(vector[y].maxx, x);
 		}
 	}
 }
 
+void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<myCell>& vector)
+{
+	float dx, dy;
+	dx = x1 - x0;
+	dy = y1 - y0;
+	float d = std::max(abs(dx), abs(dy));
+	float vy = dx / d;
+	float vx = dy / d;
+	float x = x0;
+	float y = y0;
+	for (int i = 0; i < d; i++) {
+		vector[y].minx = std::min(vector[y].minx, (int)x);
+		vector[y].maxx = std::max(vector[y].maxx, (int)x);
+		x = x + vx;
+		y = y + vy;
+	}
+}
 
 void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& color) {
 	// 1 crear tabla
 	std::vector<myCell> vector_cell(height);
 	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
-	for (int i = 0; i < height; i++) {
-		ScanLineBresenham(0, 0, width, i);
-	}
+	/*ScanLineBresenham(p0.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineBresenham(p1.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineBresenham(p2.x, p2.y, p0.x, p0.y, vector_cell);*/
+	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineDDA(p1.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, vector_cell);
 	//3 pintar lineas horizontales que representan cada punto
 	for (int i = 0; i < height; i++) {
-		DrawLineBresenham(vector_cell[i].minx, i, vector_cell[i].maxx, i, color);
+		for (int j = vector_cell[i].minx; j <= vector_cell[i].maxx; j++) {
+			SetPixelSafe(j, i, color);
+		}
 	}
 }

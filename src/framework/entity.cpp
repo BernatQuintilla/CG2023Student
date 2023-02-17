@@ -12,6 +12,9 @@ void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
 	Wireframe(framebuffer, camera, c, vs);
 }
 
+void Entity::Update(float seconds_elapsed) {
+	modelMatrix.RotateLocal(0.03, (0, 1, 0));
+}
 
 void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::vector<Vector3> vs) {
 	bool ib,jb,kb;
@@ -34,18 +37,16 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 		v_clip_k.x = (v_clip_k.x+1) / 2 * framebuffer->width;
 		v_clip_k.y = (v_clip_k.y+1) / 2 * framebuffer->height;
 		
-		if ((ib || jb || kb)==false) { //negZ
-			framebuffer->DrawLineBresenham(floor(v_clip_i.x), floor(v_clip_i.y), floor(v_clip_j.x), floor(v_clip_j.y), c);
-			framebuffer->DrawLineBresenham(floor(v_clip_j.x), floor(v_clip_j.y), floor(v_clip_k.x), floor(v_clip_k.y), c);
-			framebuffer->DrawLineBresenham(floor(v_clip_k.x), floor(v_clip_k.y), floor(v_clip_i.x), floor(v_clip_i.y), c);
-		}
-		Vector2 v0(v_clip_i.x, v_clip_i.y);
-		Vector2 v1(v_clip_j.x, v_clip_j.y);
-		Vector2 v2(v_clip_k.x, v_clip_k.y);
-		framebuffer->DrawTriangle(v0, v1, v2, c);
-	}
-}
+		if (ib || jb || kb)
+			continue;
 
-void Entity::Update(float seconds_elapsed) {
-	modelMatrix.RotateLocal(0.03, (0,1,0));
+		/*framebuffer->DrawLineBresenham(floor(v_clip_i.x), floor(v_clip_i.y), floor(v_clip_j.x), floor(v_clip_j.y), c);
+		framebuffer->DrawLineBresenham(floor(v_clip_j.x), floor(v_clip_j.y), floor(v_clip_k.x), floor(v_clip_k.y), c);
+		framebuffer->DrawLineBresenham(floor(v_clip_k.x), floor(v_clip_k.y), floor(v_clip_i.x), floor(v_clip_i.y), c);*/
+
+		v1.set(v_clip_i.x, v_clip_i.y);
+		v2.set(v_clip_j.x, v_clip_j.y);
+		v3.set(v_clip_k.x, v_clip_k.y);
+		framebuffer->DrawTriangle(v1, v2, v3, c);
+	}
 }

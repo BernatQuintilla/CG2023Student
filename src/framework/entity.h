@@ -12,6 +12,7 @@ public:
 	Matrix44 modelMatrix;
 	Mesh mesh;
 	Color c;
+	Vector2 v1, v2, v3;
 	//Constructors
 	Entity() {
 		modelMatrix = Matrix44();

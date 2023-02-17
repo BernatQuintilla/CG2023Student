@@ -29,7 +29,7 @@ Application::Application(const char* caption, int width, int height)
 	Mesh mesh1 = Mesh();
 	Mesh mesh2 = Mesh();
 	Mesh mesh3 = Mesh();
-	mesh1.LoadOBJ("meshes/anna.obj");
+	mesh1.LoadOBJ("meshes/lee.obj");
 	mesh2.LoadOBJ("meshes/lee.obj");
 	mesh3.LoadOBJ("meshes/cleo.obj");
 
@@ -72,8 +72,8 @@ void Application::Render(void)
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-	entity1->Render(&framebuffer, camera, Color(0, 0, 0));
-	entity1->modelMatrix.RotateLocal(0.03, up1);
+	/*entity1->Render(&framebuffer, camera, Color(0, 0, 0));
+	entity1->modelMatrix.RotateLocal(0.03, up1);*/
 
 	/*entity2->Render(&framebuffer, camera, Color(0, 0, 0));
 	entity2->modelMatrix.RotateLocal(0.03, up2);

@@ -113,10 +113,11 @@ public:
 	//3.1
 	void DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2, const Color& color);
 	typedef struct myCell {
-		int minx;
-		int maxx;
+		int minx = INT_MAX;
+		int maxx = INT_MIN;
 	}myCell;
-	void ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell> vector);
+	void ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell>& vector);
+	void ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<myCell>& vector);
 	void GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector);
 };
 
