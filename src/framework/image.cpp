@@ -642,12 +642,9 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 	// 1 crear tabla
 	std::vector<myCell> vector_cell(height);
 	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
-	/*ScanLineBresenham(p0.x, p0.y, p1.x, p1.y, vector_cell);
-	ScanLineBresenham(p1.x, p0.y, p1.x, p1.y, vector_cell);
-	ScanLineBresenham(p2.x, p2.y, p0.x, p0.y, vector_cell);*/
-	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, vector_cell);
-	ScanLineDDA(p1.x, p0.y, p1.x, p1.y, vector_cell);
-	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, vector_cell);
+	ScanLineBresenham(p0.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineBresenham(p1.x, p1.y, p2.x, p2.y, vector_cell);
+	ScanLineBresenham(p2.x, p2.y, p0.x, p0.y, vector_cell);
 	//3 pintar lineas horizontales que representan cada punto
 	for (int i = 0; i < height; i++) {
 		for (int j = vector_cell[i].minx; j <= vector_cell[i].maxx; j++) {
