@@ -7,16 +7,18 @@
 #include <iostream>
 
 //3.2
-void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
+void Entity::Render(Image* framebuffer, Camera* camera, FloatImage* zBuffer) {
 	std::vector<Vector3> vs = mesh.GetVertices();
-	Wireframe(framebuffer, camera, c, vs);
+	std::vector<Vector2> uvs = mesh.GetUVs();
+	Wireframe(framebuffer, camera, vs,zBuffer,uvs);
+
 }
 
 void Entity::Update(float seconds_elapsed) {
 	modelMatrix.RotateLocal(0.03, (0, 1, 0));
 }
 
-void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::vector<Vector3> vs) {
+void Entity::Wireframe(Image* framebuffer, Camera* camera,std::vector<Vector3> vs, FloatImage* zBuffer, std::vector<Vector2> uvs) {
 	bool ib,jb,kb;
 	for (int i = 0;i < vs.size()-2;i+=3){
 		//from local to world
@@ -47,7 +49,11 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera, const Color& c,std::v
 		v1.Set(v_clip_i.x, v_clip_i.y,v_clip_i.z);
 		v2.Set(v_clip_j.x, v_clip_j.y,v_clip_j.z);
 		v3.Set(v_clip_k.x, v_clip_k.y,v_clip_k.z);
+
+		Vector2 uv0 = uvs[i];
+		Vector2 uv1 = uvs[i + 1];
+		Vector2 uv2 = uvs[i + 2];
 		
-		framebuffer->DrawTriangleInterpolated(v1, v2, v3, Color(255,0,0),Color(0,255,0),Color(0,0,255));
+		framebuffer->DrawTriangleInterpolated(v1, v2, v3, Color(255,0,0),Color(0,255,0),Color(0,0,255),zBuffer,&texture, uv0, uv1, uv2);
 	}
 }

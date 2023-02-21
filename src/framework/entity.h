@@ -13,6 +13,7 @@ public:
 	Mesh mesh;
 	Color c;
 	Vector3 v1, v2, v3;
+	Image texture;
 	//Constructors
 	Entity() {
 		modelMatrix = Matrix44();
@@ -46,8 +47,8 @@ public:
 		return mesh;
 	}
 	//3.2
-	void Render(Image* framebuffer, Camera* camera, const Color& c);
-	void Wireframe(Image* framebuffer, Camera* camera, const Color& c, std::vector<Vector3> vs);
+	void Render(Image* framebuffer, Camera* camera, FloatImage* zBuffer);
+	void Wireframe(Image* framebuffer, Camera* camera, std::vector<Vector3> vs, FloatImage* zBuffer, std::vector<Vector2> uvs);
 	//3.4
 	void Update(float seconds_elapsed);
 };

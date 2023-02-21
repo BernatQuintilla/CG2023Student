@@ -19,6 +19,8 @@ Application::Application(const char* caption, int width, int height)
 	this->window_height = h;
 	this->keystate = SDL_GetKeyboardState(nullptr);
 	this->framebuffer.Resize(w, h);
+	this->zBuffer.Resize(w, h);
+	this->zBuffer.Fill(99999);
 	this->camera = new Camera();
 	this->camera->fov = 100;
 	this->camera->near_plane = 0.01;
@@ -27,26 +29,25 @@ Application::Application(const char* caption, int width, int height)
 	this->camera->type = 0;
 	this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
 	Mesh mesh1 = Mesh();
-	Mesh mesh2 = Mesh();
-	Mesh mesh3 = Mesh();
 	mesh1.LoadOBJ("meshes/lee.obj");
+	/*Mesh mesh2 = Mesh();
+	Mesh mesh3 = Mesh();
 	mesh2.LoadOBJ("meshes/lee.obj");
-	mesh3.LoadOBJ("meshes/cleo.obj");
+	mesh3.LoadOBJ("meshes/cleo.obj");*/
 
 	entity1 = new Entity(mesh1, c); 
-	entity2 = new Entity(mesh2, Color(255,0,0));
-	entity3 = new Entity(mesh3, Color(0, 0, 255));
+	/*entity2 = new Entity(mesh2, Color(255, 0, 0));
+	entity3 = new Entity(mesh3, Color(0, 0, 255));*/
 
 	entity1->modelMatrix.TranslateLocal(0, 0, -0.8);
-
-	entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
+	entity1->texture.LoadTGA("textures/lee_normal.tga");
+	/*entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
 	Vector3 v2 = Vector3(0, -0.5, 0);
 	entity2->modelMatrix.RotateLocal(1, v2);
 
 	entity3->modelMatrix.TranslateLocal(0.55, -0.2, -0.8);
 	Vector3 v3 = Vector3(0, 0.5, 0);
-	entity3->modelMatrix.RotateLocal(1, v3);
-
+	entity3->modelMatrix.RotateLocal(1, v3);*/
 }
 
 Application::~Application()
@@ -63,7 +64,7 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	entity1->Render(&framebuffer, camera, entity1->c);
+	entity1->Render(&framebuffer, camera,&zBuffer);
 	/*entity2->Render(&framebuffer, camera, entity2->c);
 	entity3->Render(&framebuffer, camera, entity3->c);*/
 	framebuffer.Render();

@@ -24,6 +24,7 @@ public:
 	Vector3 up1 = Vector3(0, 1, 0), up2 = Vector3(0.5, 1, 0),  up3 = Vector3(0.5,-1,0);
 	Camera* camera;
 	float time;
+	FloatImage zBuffer;
 
 	// Input
 	const Uint8* keystate;
