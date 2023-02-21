@@ -670,7 +670,12 @@ Color Image::BarycentricInterpolation(Vector2& P0,Vector2& P1, Vector2& P2, Vect
 	float v = (d11 * d20 - d01 * d21)/denom;
 	float w = (d00 * d21 - d01 * d20)/denom;
 	float u = 1.0 - v - w;
-
+	v = clamp(v, 0, 1);
+	w = clamp(w, 0, 1);
+	u = clamp(u, 0, 1);
+	v = v / (v + w + u);
+	w = w / (v + w + u);
+	u = u / (v + w + u);
 	Color C1 = c1*u;
 	Color C2 = c2*v;
 	Color C3 = c3*w;
