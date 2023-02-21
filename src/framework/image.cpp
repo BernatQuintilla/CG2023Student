@@ -652,3 +652,48 @@ void Image::DrawTriangle(const Vector2& p0, const Vector2& p1, const Vector2& p2
 		}
 	}
 }
+
+Color Image::BarycentricInterpolation(Vector2& P0,Vector2& P1, Vector2& P2, Vector2& P, const Color& c1, const Color& c2, const Color& c3) {
+	Vector2 v0, v1, v2;
+
+	v0 = P1 - P0;
+	v1 = P2 - P0;
+	v2 = P - P0;
+
+	float d00 = v0.Dot(v0);
+	float d01 = v0.Dot(v1);
+	float d11 = v1.Dot(v1);
+	float d20 = v2.Dot(v0);
+	float d21 = v2.Dot(v1);
+
+	float denom = d00 * d11 - d01 * d01;
+	float v = (d11 * d20 - d01 * d21)/denom;
+	float w = (d00 * d21 - d01 * d20)/denom;
+	float u = 1.0 - v - w;
+
+	Color C1 = c1*u;
+	Color C2 = c2*v;
+	Color C3 = c3*w;
+	
+	Color c = C1 + C2 + C3;
+	return c;
+}
+
+void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Color& c0, const Color& c1, const Color& c2) {
+	// 1 crear tabla
+	std::vector<myCell> vector_cell(height);
+	Vector2 P0(p0.x, p0.y);
+	Vector2 P1(p1.x, p1.y);
+	Vector2 P2(p2.x, p2.y);
+	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
+	ScanLineBresenham(p0.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineBresenham(p1.x, p1.y, p2.x, p2.y, vector_cell);
+	ScanLineBresenham(p2.x, p2.y, p0.x, p0.y, vector_cell);
+	//3 pintar lineas horizontales que representan cada punto
+	for (int i = 0; i < height; i++) {
+		for (int j = vector_cell[i].minx; j <= vector_cell[i].maxx; j++) {
+			Vector2 P(j, i);
+			SetPixelSafe(j, i, BarycentricInterpolation(P0, P1, P2, P, c0, c1, c2)); 
+		}
+	}
+}

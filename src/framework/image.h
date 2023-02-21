@@ -119,6 +119,8 @@ public:
 	void ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell>& vector);
 	void ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<myCell>& vector);
 	void GetTrianglePoints(const Vector2& p0, const Vector2& p1, const Vector2& p2, std::vector<myCell> vector);
+	Color BarycentricInterpolation(Vector2& P0, Vector2& P1, Vector2& P2, Vector2& P, const Color& c1, const Color& c2, const Color& c3);
+	void DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Color& c0, const Color& c1, const Color& c2);
 };
 
 // Image storing one float per pixel instead of a 3 or 4 component Color
