@@ -30,31 +30,32 @@ Application::Application(const char* caption, int width, int height)
 	this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
 	Mesh mesh1 = Mesh();
 	mesh1.LoadOBJ("meshes/lee.obj");
-	/*Mesh mesh2 = Mesh();
-	Mesh mesh3 = Mesh();
+	Mesh mesh2 = Mesh();
 	mesh2.LoadOBJ("meshes/anna.obj");
-	mesh3.LoadOBJ("meshes/cleo.obj");*/
+	Mesh mesh3 = Mesh();
+	mesh3.LoadOBJ("meshes/cleo.obj");
 
 	this->entity1 = new Entity(mesh1, c); 
-	/*entity2 = new Entity(mesh2, Color(255, 0, 0));
-	entity3 = new Entity(mesh3, Color(0, 0, 255));*/
+	this->entity2 = new Entity(mesh2, Color(255, 0, 0));
+	this->entity3 = new Entity(mesh3, Color(0, 0, 255));
 
 	entity1->modelMatrix.TranslateLocal(0, 0, -0.8);
-
 	entity1->texture = new Image();
 	entity1->texture->LoadTGA("textures/lee_color_specular.tga", true);
 
-	/*entity2->texture = new Image();
-	entity2->texture->LoadTGA("textures/anna_color_specular.tga", true);
+	entity2->texture = new Image();
 	entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
+	//entity2->texture = nullptr;
+	entity2->texture->LoadTGA("textures/anna_color_specular.tga", true);
 	Vector3 v2 = Vector3(0, -0.5, 0);
 	entity2->modelMatrix.RotateLocal(1, v2);
 
-	entity2->texture = new Image();
-	entity2->texture->LoadTGA("textures/cleo_color_specular.tga", true);
+	entity3->texture = new Image();
 	entity3->modelMatrix.TranslateLocal(0.55, -0.2, -0.8);
+	//entity3->texture = nullptr;
+	entity3->texture->LoadTGA("textures/cleo_color_specular.tga", true);
 	Vector3 v3 = Vector3(0, 0.5, 0);
-	entity3->modelMatrix.RotateLocal(1, v3);*/
+	entity3->modelMatrix.RotateLocal(1, v3);
 }
 
 Application::~Application()
@@ -72,8 +73,8 @@ void Application::Init(void)
 void Application::Render(void)
 {
 	entity1->Render(&framebuffer, camera,&zBuffer);
-	/*entity2->Render(&framebuffer, camera, &zBuffer);
-	entity3->Render(&framebuffer, camera, &zBuffer);*/
+	entity2->Render(&framebuffer, camera, &zBuffer);
+	entity3->Render(&framebuffer, camera, &zBuffer);
 	framebuffer.Render();
 }
 
@@ -101,7 +102,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_c: entity1->texture = nullptr; break;
-		case SDLK_t: entity1->texture = new Image(); entity1->texture->LoadTGA("textures/lee_normal.tga"); break;
+		case SDLK_t: entity1->texture = new Image(); entity1->texture->LoadTGA("textures/lee_color_specular.tga"); break;
 	}
 }
 

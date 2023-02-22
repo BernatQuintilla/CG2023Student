@@ -412,71 +412,90 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c)
 }
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c)
 {
-	float inc_E, inc_NE, dx, dy, d, ay;
-	int x, y, sx, sy, fx, fy;
-	sx = x0;
-	sy = y0;
-	fx = x1;
-	fy = y1;
-	if (x0 > x1) {
-		sx = x1;
-		sy = y1;
-		fx = x0;
-		fy = y0;
+	if (x1 < x0) {
+		int t = x1;
+		x1 = x0;
+		x0 = t;
+
+		t = y1;
+		y1 = y0;
+		y0 = t;
 	}
-	dx = fx - sx;
-	dy = fy - sy;
-	x = sx;
-	y = sy;
-	ay = dy;
-	ay = abs(ay);
+
+	int dx, dy, iE, iNE, d, x, y;
+
+	dx = x1 - x0;
+	dy = y1 - y0;
+
+	// 8th octant
+	if (y0 > y1)
+		dy = -dy;
+
+	iE = 2 * dy;
+	iNE = 2 * (dy - dx);
+	d = 2 * dy - dx;
+	x = x0;
+	y = y0;
+
 	SetPixelSafe(x, y, c);
-	if (dx > ay) {
-		inc_E = 2 * ay;
-		inc_NE = 2 * (ay - dx);
-		d = 2 * ay - dx;
-		while (fx > x) {
+
+	if (dx > dy) {
+
+		while (x < x1) {
+
 			if (d <= 0) {
-				d = d + inc_E;
-				x++;
+				d += iE;
+				x += 1;
 			}
 			else {
-				d = d + inc_NE;
-				x++;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+				d += iNE;
+				x += 1;
+				if (y0 > y1) // 8th octant
+					y -= 1;
+				else
+					y += 1;
 			}
+
 			SetPixelSafe(x, y, c);
+
 		}
 	}
+	// 2nd and 6th octants
 	else {
-		inc_E = 2 * dx;
-		inc_NE = 2 * (dx - ay);
-		d = 2 * (dx - ay);
-		while (y != fy) {
-			if (d > 0) {
-				d = d - inc_E;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+
+		iE = 2 * dx;
+		iNE = 2 * (dx - dy);
+		d = 2 * dx - dy;
+
+		// 3rd and 7th octants
+		if (y1 < y0) {
+			int t = x1;
+			x1 = x0;
+			x0 = t;
+
+			t = y1;
+			y1 = y0;
+			y0 = t;
+
+			x = x0;
+			y = y0;
+		}
+
+		while (y < y1) {
+
+			if (d <= 0) {
+				d += iE;
+				y += 1;
 			}
 			else {
-				d = d - inc_NE;
-				x++;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+				d += iNE;
+				y += 1;
+				if (x0 > x1)
+					x -= 1;
+				else
+					x += 1;
 			}
+
 			SetPixelSafe(x, y, c);
 		}
 	}
@@ -546,75 +565,92 @@ void Image::DrawImagePixels(const Image& image, bool top) {
 
 void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell>& vector)
 {
-	float inc_E, inc_NE, dx, dy, d, ay;
-	int x, y, sx, sy, fx, fy;
-	sx = x0;
-	sy = y0;
-	fx = x1;
-	fy = y1;
-	if (x0 > x1) {
-		sx = x1;
-		sy = y1;
-		fx = x0;
-		fy = y0;
+	if (x1 < x0) {
+		int t = x1;
+		x1 = x0;
+		x0 = t;
+
+		t = y1;
+		y1 = y0;
+		y0 = t;
 	}
-	dx = fx - sx;
-	dy = fy - sy;
-	x = sx;
-	y = sy;
-	ay = dy;
-	ay = abs(ay);
+
+	int dx, dy, iE, iNE, d, x, y;
+
+	dx = x1 - x0;
+	dy = y1 - y0;
+
+	// 8th octant
+	if (y0 > y1)
+		dy = -dy;
+
+	iE = 2 * dy;
+	iNE = 2 * (dy - dx);
+	d = 2 * dy - dx;
+	x = x0;
+	y = y0;
 
 	vector[y].minx = std::min(vector[y].minx, x);
 	vector[y].maxx = std::max(vector[y].maxx, x);
-	
-	if (dx > ay) {
-		inc_E = 2 * ay;
-		inc_NE = 2 * (ay - dx);
-		d = 2 * ay - dx;
-		while (fx > x) {
+
+	if (dx > dy) {
+
+		while (x < x1) {
+
 			if (d <= 0) {
-				d = d + inc_E;
-				x++;
+				d += iE;
+				x += 1;
 			}
 			else {
-				d = d + inc_NE;
-				x++;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+				d += iNE;
+				x += 1;
+				if (y0 > y1) // 8th octant
+					y -= 1;
+				else
+					y += 1;
 			}
+
 			vector[y].minx = std::min(vector[y].minx, x);
 			vector[y].maxx = std::max(vector[y].maxx, x);
+
 		}
 	}
+	// 2nd and 6th octants
 	else {
-		inc_E = 2 * dx;
-		inc_NE = 2 * (dx - ay);
-		d = 2 * (dx - ay);
-		while (y != fy) {
-			if (d > 0) {
-				d = d - inc_E;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+
+		iE = 2 * dx;
+		iNE = 2 * (dx - dy);
+		d = 2 * dx - dy;
+
+		// 3rd and 7th octants
+		if (y1 < y0) {
+			int t = x1;
+			x1 = x0;
+			x0 = t;
+
+			t = y1;
+			y1 = y0;
+			y0 = t;
+
+			x = x0;
+			y = y0;
+		}
+
+		while (y < y1) {
+
+			if (d <= 0) {
+				d += iE;
+				y += 1;
 			}
 			else {
-				d = d - inc_NE;
-				x++;
-				if (dy < 0) {
-					y--;
-				}
-				else {
-					y++;
-				}
+				d += iNE;
+				y += 1;
+				if (x0 > x1)
+					x -= 1;
+				else
+					x += 1;
 			}
+
 			vector[y].minx = std::min(vector[y].minx, x);
 			vector[y].maxx = std::max(vector[y].maxx, x);
 		}
@@ -740,10 +776,19 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 						y = y * texture->height;
 						int auxx = (int)x;
 						int auxy = (int)y;
-						Color t = Color(190,140,150);
+						Color t = Color(180,150,140);
 						if (x <= texture->width && y <= texture->height) {
 							t = texture->GetPixel(auxx, auxy);
 						}
+						/*else if (x <= texture->width && y > texture->height) {
+							t = texture->GetPixel(auxx, texture->height - 1);
+						}
+						else if (x > texture->width && y <= texture->height){
+							t = texture->GetPixel(texture->width - 1, auxy);
+						}
+						else {
+							t = texture->GetPixel(texture->width - 1, texture->height - 1);
+						}*/
 						SetPixelSafe(j, i, t);
 					}
 				}
