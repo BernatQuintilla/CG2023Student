@@ -35,12 +35,15 @@ Application::Application(const char* caption, int width, int height)
 	mesh2.LoadOBJ("meshes/lee.obj");
 	mesh3.LoadOBJ("meshes/cleo.obj");*/
 
-	entity1 = new Entity(mesh1, c); 
+	this->entity1 = new Entity(mesh1, c); 
 	/*entity2 = new Entity(mesh2, Color(255, 0, 0));
 	entity3 = new Entity(mesh3, Color(0, 0, 255));*/
 
 	entity1->modelMatrix.TranslateLocal(0, 0, -0.8);
-	entity1->texture.LoadTGA("textures/lee_normal.tga");
+	entity1->texture = new Image(1,1);
+	entity1->texture->LoadTGA("textures/lee_normal.tga");
+	//nullptr; //.LoadTGA(nullptr);//"textures/lee_normal.tga"
+
 	/*entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
 	Vector3 v2 = Vector3(0, -0.5, 0);
 	entity2->modelMatrix.RotateLocal(1, v2);
@@ -93,6 +96,8 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); printf("type of projection: Perspective\n"); break;
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
+		case SDLK_c: entity1->texture = nullptr; break;
+		case SDLK_t: entity1->texture = new Image(); entity1->texture->LoadTGA("textures/lee_normal.tga"); break;
 	}
 }
 

@@ -54,6 +54,6 @@ void Entity::Wireframe(Image* framebuffer, Camera* camera,std::vector<Vector3> v
 		Vector2 uv1 = uvs[i + 1];
 		Vector2 uv2 = uvs[i + 2];
 		
-		framebuffer->DrawTriangleInterpolated(v1, v2, v3, Color(255,0,0),Color(0,255,0),Color(0,0,255),zBuffer,&texture, uv0, uv1, uv2);
+		framebuffer->DrawTriangleInterpolated(v1, v2, v3, Color(255,0,0),Color(0,255,0),Color(0,0,255),zBuffer,texture, uv0, uv1, uv2);
 	}
 }

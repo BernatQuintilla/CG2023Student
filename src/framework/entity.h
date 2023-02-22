@@ -13,7 +13,7 @@ public:
 	Mesh mesh;
 	Color c;
 	Vector3 v1, v2, v3;
-	Image texture;
+	Image* texture = nullptr;
 	//Constructors
 	Entity() {
 		modelMatrix = Matrix44();

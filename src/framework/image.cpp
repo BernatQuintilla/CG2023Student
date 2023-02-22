@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "camera.h"
 #include "mesh.h"
+#include "texture.h"
 
 Image::Image() {
 	width = 0; height = 0;
@@ -698,72 +699,47 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 	//3 pintar lineas horizontales que representan cada punto
 	for (int i = 0; i < height; i++) {
 		for (int j = vector_cell[i].minx; j <= vector_cell[i].maxx; j++) {
-			if (texture == nullptr) {
-				Vector2 P(j, i);
-				Vector2 v0, v1, v2;
+			Vector2 P(j, i);
+			Vector2 v0, v1, v2;
 
-				v0 = P1 - P0;
-				v1 = P2 - P0;
-				v2 = P - P0;
+			v0 = P1 - P0;
+			v1 = P2 - P0;
+			v2 = P - P0;
 
-				float d00 = v0.Dot(v0);
-				float d01 = v0.Dot(v1);
-				float d11 = v1.Dot(v1);
-				float d20 = v2.Dot(v0);
-				float d21 = v2.Dot(v1);
+			float d00 = v0.Dot(v0);
+			float d01 = v0.Dot(v1);
+			float d11 = v1.Dot(v1);
+			float d20 = v2.Dot(v0);
+			float d21 = v2.Dot(v1);
 
-				float denom = d00 * d11 - d01 * d01;
-				float v = (d11 * d20 - d01 * d21) / denom;
-				float w = (d00 * d21 - d01 * d20) / denom;
-				float u = 1.0 - v - w;
-				v = clamp(v, 0, 1);
-				w = clamp(w, 0, 1);
-				u = clamp(u, 0, 1);
-				v = v / (v + w + u);
-				w = w / (v + w + u);
-				u = u / (v + w + u);
-				Color C0 = c0 * u;
-				Color C1 = c1 * v;
-				Color C2 = c2 * w;
-
-				Color c = C0 + C1 + C2;
-				float z = p0.z * u + p1.z * v + p2.z * w;
-				if (z < zbuffer->GetPixel(j, i)) {
-					SetPixelSafe(j, i, c);
+			float denom = d00 * d11 - d01 * d01;
+			float v = (d11 * d20 - d01 * d21) / denom;
+			float w = (d00 * d21 - d01 * d20) / denom;
+			float u = 1.0 - v - w;
+			v = clamp(v, 0, 1);
+			w = clamp(w, 0, 1);
+			u = clamp(u, 0, 1);
+			v = v / (v + w + u);
+			w = w / (v + w + u);
+			u = u / (v + w + u);
+			Color C0 = c0 * u;
+			Color C1 = c1 * v;
+			Color C2 = c2 * w;
+			Color c = C0 + C1 + C2;
+			float z = p0.z * u + p1.z * v + p2.z * w;
+			if (z < zbuffer->GetPixel(j, i)) {
+				if (i < this->height && i >= 0 && j < this->width && j >= 0) {
 					zbuffer->SetPixel(j, i, z);
-				}
-			}
-			else {
-				Vector2 P(j, i);
-				Vector2 v0, v1, v2;
-
-				v0 = uv1 - uv0;
-				v1 = uv2 - uv0;
-				v2 = P - uv0;
-
-				float d00 = v0.Dot(v0);
-				float d01 = v0.Dot(v1);
-				float d11 = v1.Dot(v1);
-				float d20 = v2.Dot(v0);
-				float d21 = v2.Dot(v1);
-
-				float denom = d00 * d11 - d01 * d01;
-				float v = (d11 * d20 - d01 * d21) / denom;
-				float w = (d00 * d21 - d01 * d20) / denom;
-				float u = 1.0 - v - w;
-				v = clamp(v, 0, 1);
-				w = clamp(w, 0, 1);
-				u = clamp(u, 0, 1);
-				v = v / (v + w + u);
-				w = w / (v + w + u);
-				u = u / (v + w + u);
-				float z = p0.z * u + p1.z * v + p2.z * w;
-
-				float x = uv0.x * u + uv1.x * v + uv2.x * w;
-				float y = uv0.y * u + uv1.y * v + uv2.y * w;
-				if (z < zbuffer->GetPixel(j, i)) {
-					SetPixelSafe(j, i, texture->GetPixel(x, y));
-					zbuffer->SetPixel(j, i, z);
+					if (texture == nullptr) {
+						SetPixelSafe(j, i, c);
+					}
+					else {
+						float x = uv0.x * u + uv1.x * v + uv2.x * w;
+						float y = uv0.y * u + uv1.y * v + uv2.y * w;
+						x = x * (texture->width - 1);
+						y = y * (texture->height - 1);
+						SetPixelSafe(j, i, texture->GetPixel(x, y));
+					}
 				}
 			}
 		}
