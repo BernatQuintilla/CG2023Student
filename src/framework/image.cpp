@@ -736,9 +736,15 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 					else {
 						float x = uv0.x * u + uv1.x * v + uv2.x * w;
 						float y = uv0.y * u + uv1.y * v + uv2.y * w;
-						x = x * (texture->width - 1);
-						y = y * (texture->height - 1);
-						SetPixelSafe(j, i, texture->GetPixel(x, y));
+						x = x * texture->width;
+						y = y * texture->height;
+						int auxx = (int)x;
+						int auxy = (int)y;
+						Color t = Color(190,140,150);
+						if (x <= texture->width && y <= texture->height) {
+							t = texture->GetPixel(auxx, auxy);
+						}
+						SetPixelSafe(j, i, t);
 					}
 				}
 			}

@@ -32,7 +32,7 @@ Application::Application(const char* caption, int width, int height)
 	mesh1.LoadOBJ("meshes/lee.obj");
 	/*Mesh mesh2 = Mesh();
 	Mesh mesh3 = Mesh();
-	mesh2.LoadOBJ("meshes/lee.obj");
+	mesh2.LoadOBJ("meshes/anna.obj");
 	mesh3.LoadOBJ("meshes/cleo.obj");*/
 
 	this->entity1 = new Entity(mesh1, c); 
@@ -40,14 +40,18 @@ Application::Application(const char* caption, int width, int height)
 	entity3 = new Entity(mesh3, Color(0, 0, 255));*/
 
 	entity1->modelMatrix.TranslateLocal(0, 0, -0.8);
-	entity1->texture = new Image(1,1);
-	entity1->texture->LoadTGA("textures/lee_normal.tga");
-	//nullptr; //.LoadTGA(nullptr);//"textures/lee_normal.tga"
 
-	/*entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
+	entity1->texture = new Image();
+	entity1->texture->LoadTGA("textures/lee_color_specular.tga", true);
+
+	/*entity2->texture = new Image();
+	entity2->texture->LoadTGA("textures/anna_color_specular.tga", true);
+	entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.8);
 	Vector3 v2 = Vector3(0, -0.5, 0);
 	entity2->modelMatrix.RotateLocal(1, v2);
 
+	entity2->texture = new Image();
+	entity2->texture->LoadTGA("textures/cleo_color_specular.tga", true);
 	entity3->modelMatrix.TranslateLocal(0.55, -0.2, -0.8);
 	Vector3 v3 = Vector3(0, 0.5, 0);
 	entity3->modelMatrix.RotateLocal(1, v3);*/
@@ -68,8 +72,8 @@ void Application::Init(void)
 void Application::Render(void)
 {
 	entity1->Render(&framebuffer, camera,&zBuffer);
-	/*entity2->Render(&framebuffer, camera, entity2->c);
-	entity3->Render(&framebuffer, camera, entity3->c);*/
+	/*entity2->Render(&framebuffer, camera, &zBuffer);
+	entity3->Render(&framebuffer, camera, &zBuffer);*/
 	framebuffer.Render();
 }
 
