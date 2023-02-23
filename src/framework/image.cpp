@@ -785,8 +785,8 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 							Color t = Color(180, 150, 140);
 							if (x <= texture->width && y <= texture->height) {
 								t = texture->GetPixel(auxx, auxy);
+								SetPixelSafe(j, i, t);
 							}
-							SetPixelSafe(j, i, t);
 						}
 					}
 				}
@@ -806,8 +806,8 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 						Color t = Color(180, 150, 140);
 						if (x <= texture->width && y <= texture->height) {
 							t = texture->GetPixel(auxx, auxy);
+							SetPixelSafe(j, i, t);
 						}
-						SetPixelSafe(j, i, t);
 					}
 				}
 			}
