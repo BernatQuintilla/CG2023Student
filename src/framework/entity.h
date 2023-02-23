@@ -14,6 +14,7 @@ public:
 	Color c;
 	Vector3 v1, v2, v3;
 	Image* texture;
+	int mode = 1;
 	//Constructors
 	Entity() {
 		modelMatrix = Matrix44();
@@ -51,4 +52,8 @@ public:
 	void Wireframe(Image* framebuffer, Camera* camera, std::vector<Vector3> vs, FloatImage* zBuffer, std::vector<Vector2> uvs);
 	//3.4
 	void Update(float seconds_elapsed);
+	void WireframeColor(Image* framebuffer, Camera* camera, std::vector<Vector3> vs);
+	void RenderColor(Image* framebuffer, Camera* camera);
+	void WireframeMulticolor(Image* framebuffer, Camera* camera, std::vector<Vector3> vs, FloatImage* zBuffer);
+	void RenderMulticolor(Image* framebuffer, Camera* camera, FloatImage* zBuffer);
 };

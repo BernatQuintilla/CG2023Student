@@ -25,6 +25,7 @@ public:
 	Camera* camera;
 	float time;
 	FloatImage zBuffer;
+	int mode = 3; //mode 1 textures mode 2 color mode 3 multicolor
 
 	// Input
 	const Uint8* keystate;

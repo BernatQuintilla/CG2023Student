@@ -590,8 +590,10 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 	x = x0;
 	y = y0;
 
-	vector[y].minx = std::min(vector[y].minx, x);
-	vector[y].maxx = std::max(vector[y].maxx, x);
+	if (y >= 0 && y < height) {
+		vector[y].minx = std::min(vector[y].minx, x);
+		vector[y].maxx = std::max(vector[y].maxx, x);
+	}
 
 	if (dx > dy) {
 
@@ -610,8 +612,10 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 					y += 1;
 			}
 
-			vector[y].minx = std::min(vector[y].minx, x);
-			vector[y].maxx = std::max(vector[y].maxx, x);
+			if (y >= 0 && y < height) {
+				vector[y].minx = std::min(vector[y].minx, x);
+				vector[y].maxx = std::max(vector[y].maxx, x);
+			}
 
 		}
 	}
@@ -650,9 +654,10 @@ void Image::ScanLineBresenham(int x0, int y0, int x1, int y1, std::vector<myCell
 				else
 					x += 1;
 			}
-
-			vector[y].minx = std::min(vector[y].minx, x);
-			vector[y].maxx = std::max(vector[y].maxx, x);
+			if (y >= 0 && y < height) {
+				vector[y].minx = std::min(vector[y].minx, x);
+				vector[y].maxx = std::max(vector[y].maxx, x);
+			}
 		}
 	}
 }
@@ -751,7 +756,7 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 			float denom = d00 * d11 - d01 * d01;
 			float v = (d11 * d20 - d01 * d21) / denom;
 			float w = (d00 * d21 - d01 * d20) / denom;
-			float u = 1.0 - v - w;
+			float u = 1.0f - v - w;
 			v = clamp(v, 0, 1);
 			w = clamp(w, 0, 1);
 			u = clamp(u, 0, 1);
@@ -762,10 +767,32 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 			Color C1 = c1 * v;
 			Color C2 = c2 * w;
 			Color c = C0 + C1 + C2;
-			float z = p0.z * u + p1.z * v + p2.z * w;
-			if (z < zbuffer->GetPixel(j, i)) {
+			if (flag) {
+				float z = p0.z * u + p1.z * v + p2.z * w;
+				if (z < zbuffer->GetPixel(j, i)) {
+					if (i < this->height && i >= 0 && j < this->width && j >= 0) {
+						zbuffer->SetPixel(j, i, z);
+						if (texture == nullptr) {
+							SetPixelSafe(j, i, c);
+						}
+						else {
+							float x = uv0.x * u + uv1.x * v + uv2.x * w;
+							float y = uv0.y * u + uv1.y * v + uv2.y * w;
+							x = x * texture->width;
+							y = y * texture->height;
+							int auxx = (int)x;
+							int auxy = (int)y;
+							Color t = Color(180, 150, 140);
+							if (x <= texture->width && y <= texture->height) {
+								t = texture->GetPixel(auxx, auxy);
+							}
+							SetPixelSafe(j, i, t);
+						}
+					}
+				}
+			}
+			else {
 				if (i < this->height && i >= 0 && j < this->width && j >= 0) {
-					zbuffer->SetPixel(j, i, z);
 					if (texture == nullptr) {
 						SetPixelSafe(j, i, c);
 					}
@@ -776,23 +803,73 @@ void Image::DrawTriangleInterpolated(const Vector3& p0, const Vector3& p1, const
 						y = y * texture->height;
 						int auxx = (int)x;
 						int auxy = (int)y;
-						Color t = Color(180,150,140);
+						Color t = Color(180, 150, 140);
 						if (x <= texture->width && y <= texture->height) {
 							t = texture->GetPixel(auxx, auxy);
 						}
-						/*else if (x <= texture->width && y > texture->height) {
-							t = texture->GetPixel(auxx, texture->height - 1);
-						}
-						else if (x > texture->width && y <= texture->height){
-							t = texture->GetPixel(texture->width - 1, auxy);
-						}
-						else {
-							t = texture->GetPixel(texture->width - 1, texture->height - 1);
-						}*/
 						SetPixelSafe(j, i, t);
 					}
 				}
 			}
 		}
 	}	
+}
+void Image::DrawTriangleInterpolatedMulticolor(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Color& c0, const Color& c1, const Color& c2, FloatImage* zbuffer) {
+	// 1 crear tabla
+	std::vector<myCell> vector_cell(height);
+	Vector2 P0(p0.x, p0.y);
+	Vector2 P1(p1.x, p1.y);
+	Vector2 P2(p2.x, p2.y);
+
+	// 2 con bresenham cada fila de framebuffer guardar dos puntos donde esta el triangulo
+	ScanLineBresenham(p0.x, p0.y, p1.x, p1.y, vector_cell);
+	ScanLineBresenham(p1.x, p1.y, p2.x, p2.y, vector_cell);
+	ScanLineBresenham(p2.x, p2.y, p0.x, p0.y, vector_cell);
+	//3 pintar lineas horizontales que representan cada punto
+	for (int i = 0; i < height; i++) {
+		for (int j = vector_cell[i].minx; j <= vector_cell[i].maxx; j++) {
+			Vector2 P(j, i);
+			Vector2 v0, v1, v2;
+
+			v0 = P1 - P0;
+			v1 = P2 - P0;
+			v2 = P - P0;
+
+			float d00 = v0.Dot(v0);
+			float d01 = v0.Dot(v1);
+			float d11 = v1.Dot(v1);
+			float d20 = v2.Dot(v0);
+			float d21 = v2.Dot(v1);
+
+			float denom = d00 * d11 - d01 * d01;
+			float v = (d11 * d20 - d01 * d21) / denom;
+			float w = (d00 * d21 - d01 * d20) / denom;
+			float u = 1.0f - v - w;
+			v = clamp(v, 0, 1);
+			w = clamp(w, 0, 1);
+			u = clamp(u, 0, 1);
+			v = v / (v + w + u);
+			w = w / (v + w + u);
+			u = u / (v + w + u);
+			Color C0 = c0 * u;
+			Color C1 = c1 * v;
+			Color C2 = c2 * w;
+			Color c = C0 + C1 + C2;
+			if (flag) {
+				float z = p0.z * u + p1.z * v + p2.z * w;
+				if (z < zbuffer->GetPixel(j, i)) {
+					if (i < this->height && i >= 0 && j < this->width && j >= 0) {
+						zbuffer->SetPixel(j, i, z);
+						SetPixelSafe(j, i, c);
+
+					}
+				}
+			}
+			else {
+				if (i < this->height && i >= 0 && j < this->width && j >= 0) {
+					SetPixelSafe(j, i, c);
+				}
+			}
+		}
+	}
 }
