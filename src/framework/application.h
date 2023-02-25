@@ -15,7 +15,7 @@ public:
 
 	// Window
 
-	SDL_Window* window;
+	SDL_Window* window = nullptr;
 	int window_width;
 	int window_height;
 	Entity* entity1;
