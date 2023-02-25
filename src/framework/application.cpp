@@ -111,6 +111,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_1: task = 1; break;
 		case SDLK_2: task = 2; break;
+		case SDLK_3: task = 3; break;
 		
 			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }

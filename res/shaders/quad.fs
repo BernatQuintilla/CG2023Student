@@ -11,15 +11,18 @@ void main()
 	float x = v_uv.x;
 	float y = v_uv.y;
 	vec3 final_color = mix(red,blue,1-x);
-	float dx = x - 0.5;
-	float dy = y - 0.5;
+	float dx = distance(x,0.5);
+	float dy = distance(y,0.5);
 	float d = sqrt(dx*dx + dy*dy);
-	final_color = mix(white,black,d);
-	if(u_task == 1){
-		float dx = x - 0.5;
-		float dy = y - 0.5;
-		float d = sqrt(dx*dx + dy*dy);
+	if(u_task == 2){
 		final_color = mix(white,black,d);
+	}
+	if(u_task == 3){
+		float dmx = mod(x,0.1);
+		float dmy = mod(y,0.1);
+		float intensidadx = 1-dmx;
+		float intensidady = 1-dmy;
+		final_color = vec3(1.0*intensidady,0.0,1.0*intensidadx);
 	}
 	
 	gl_FragColor = vec4(final_color,1.0);
