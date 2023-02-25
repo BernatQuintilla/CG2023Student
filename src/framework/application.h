@@ -24,8 +24,11 @@ public:
 	Vector3 up1 = Vector3(0, 1, 0), up2 = Vector3(0.5, 1, 0),  up3 = Vector3(0.5,-1,0);
 	Camera* camera;
 	float time;
+	int task;
+
 	FloatImage zBuffer;
 	int mode = 3; //mode 1 textures mode 2 color mode 3 multicolor
+
 
 	// Input
 	const Uint8* keystate;

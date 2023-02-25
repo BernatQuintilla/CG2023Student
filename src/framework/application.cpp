@@ -5,6 +5,8 @@
 #include "entity.h"
 #include <cmath>
 #include <iostream>
+Shader* shader = nullptr; 
+Mesh* mesh = nullptr;
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -67,16 +69,20 @@ void Application::Init(void)
 {
 	std::cout << "Initiating app..." << std::endl;
 	printf("type of projection: Perspective\n");
+	mesh = new Mesh();
+	mesh->CreateQuad();
+	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs"); //slides
 	
 }
 
 // Render one frame
 void Application::Render(void)
 {
-	entity1->Render(&framebuffer, camera, &zBuffer);
-	entity2->Render(&framebuffer, camera, &zBuffer);
-	entity3->Render(&framebuffer, camera, &zBuffer);
-	framebuffer.Render();
+	// para 3D mallas: glEnable(GL_DEPTH_TEST)
+	shader->Enable();
+	shader->SetFloat("u_time", time);
+	mesh->Render();
+	shader->Disable();
 }
 
 // Called after render
@@ -103,13 +109,16 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); printf("type of projection: Perspective\n"); break;
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
-
-		case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
+		case SDLK_1: task = 1; break;
+		case SDLK_2: task = 2; break;
+		
+			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }
 
 		case SDLK_t: framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 1; entity2->mode = 1; entity3->mode = 1; break;
 
 		case SDLK_c: if (entity1->mode != 2) { framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 2; entity2->mode = 2; entity3->mode = 2; break; }else{ framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 3; entity2->mode = 3; entity3->mode = 3; break; }
+		*/
 	}
 }
 
