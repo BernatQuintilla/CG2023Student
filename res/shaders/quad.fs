@@ -14,7 +14,6 @@ void main()
 	float dx = distance(x,0.5);
 	float dy = distance(y,0.5);
 	float d = sqrt(dx*dx + dy*dy);
-	gl_FragColor = vec4(final_color,1.0);
 	if(u_task == 2){
 		final_color = mix(white,black,d);
 	}
@@ -36,8 +35,11 @@ void main()
 		}
 		float mixAmounty = smoothstep(0.0,stripeWidth, minDisty);
 		float mixAmountx = smoothstep(0.0,stripeWidth, minDistx);
-		vec3 color = mix(vec3(0.0),red,mixAmounty) + mix(vec3(0.0),blue,mixAmountx);
-		gl_FragColor = vec4(color,1.0);
+		final_color = mix(vec3(0.0),red,mixAmounty) + mix(vec3(0.0),blue,mixAmountx);
 	}
-
+	//if(u_task == 4){
+		int m = mod(dx,dy);
+		final_color = mix(red,blue,m);
+	//}
+	gl_FragColor = vec4(final_color,1.0);
 }
