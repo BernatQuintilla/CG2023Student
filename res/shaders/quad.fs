@@ -14,16 +14,30 @@ void main()
 	float dx = distance(x,0.5);
 	float dy = distance(y,0.5);
 	float d = sqrt(dx*dx + dy*dy);
+	gl_FragColor = vec4(final_color,1.0);
 	if(u_task == 2){
 		final_color = mix(white,black,d);
 	}
 	if(u_task == 3){
-		float dmx = mod(x,0.1);
-		float dmy = mod(y,0.1);
-		float intensidadx = 1-dmx;
-		float intensidady = 1-dmy;
-		final_color = vec3(1.0*intensidady,0.0,1.0*intensidadx);
+		int numStripes = 20; // número de rayas
+		float stripeWidth = 0.1; // ancho de cada raya
+		// calcular la posición del centro de la primera raya
+		float firstStripePos = -0.45 + (stripeWidth / 2.0);
+		float minDisty = distance(firstStripePos,x);
+		float minDistx = distance(firstStripePos,y);
+		for (int i = 0; i < numStripes; i++) {
+			// calcular la posición del centro de la raya actual
+			float stripePos = firstStripePos + (i * stripeWidth);
+			// determinar si el fragmento de píxel está dentro de la raya
+			float distx = abs(x - stripePos);
+			float disty = abs(y - stripePos);
+			minDisty = min(minDisty, distx);
+			minDistx = min(minDistx, disty);
+		}
+		float mixAmounty = smoothstep(0.0,stripeWidth, minDisty);
+		float mixAmountx = smoothstep(0.0,stripeWidth, minDistx);
+		vec3 color = mix(vec3(0.0),red,mixAmounty) + mix(vec3(0.0),blue,mixAmountx);
+		gl_FragColor = vec4(color,1.0);
 	}
-	
-	gl_FragColor = vec4(final_color,1.0);
+
 }
