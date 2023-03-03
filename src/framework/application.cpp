@@ -81,6 +81,7 @@ void Application::Render(void)
 	// para 3D mallas: glEnable(GL_DEPTH_TEST)
 	shader->Enable();
 	shader->SetFloat("u_time", time);
+	shader->SetFloat("u_task", task);
 	mesh->Render();
 	shader->Disable();
 }
@@ -112,6 +113,9 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_1: task = 1; break;
 		case SDLK_2: task = 2; break;
 		case SDLK_3: task = 3; break;
+		case SDLK_4: task = 4; break;
+		case SDLK_5: task = 5; break;
+		case SDLK_6: task = 6; break;
 		
 			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }

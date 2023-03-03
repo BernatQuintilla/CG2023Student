@@ -1,6 +1,6 @@
 varying vec2 v_uv;
 uniform float u_time;
-uniform int u_task;
+uniform float u_task;
 
 void main()
 {
@@ -37,9 +37,21 @@ void main()
 		float mixAmountx = smoothstep(0.0,stripeWidth, minDistx);
 		final_color = mix(vec3(0.0),red,mixAmounty) + mix(vec3(0.0),blue,mixAmountx);
 	}
-	//if(u_task == 4){
-		int m = mod(dx,dy);
-		final_color = mix(red,blue,m);
-	//}
+	if(u_task == 4){
+		float mx = mod(x,0.1);
+		float my = mod(y,0.1);
+		final_color = mix(vec3(v_uv,0.0),vec3(0.0,0.0,0.0),mx+my);
+	}
+	if(u_task == 5){
+		float s = step(0.25 * sin(2 * 3.14 * x) + 0.5,y);
+		final_color = mix(mix(vec3(0.0,0.0,0.0),vec3(0.0,1.0,0.0),y),mix(vec3(0.0,1.0,0.0),vec3(0.0,0.0,0.0),y),s);
+		
+	}
+	if(u_task == 6){
+		for(int i=0;i<20;i++){
+			float m = step(i*0,1,y);
+
+		}
+	}
 	gl_FragColor = vec4(final_color,1.0);
 }
