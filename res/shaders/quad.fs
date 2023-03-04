@@ -48,10 +48,10 @@ void main()
 		
 	}
 	if(u_task == 6){
-		for(int i=0;i<20;i++){
-			float m = step(i*0,1,y);
-
-		}
+		int row = int(y*20);
+		int col = int(x*20);
+		float color = mix(1.0, 0.0, step(1.0, mod(float(row + col), 2.0)));
+		final_color = vec3(color,color,color);
 	}
 	gl_FragColor = vec4(final_color,1.0);
 }
