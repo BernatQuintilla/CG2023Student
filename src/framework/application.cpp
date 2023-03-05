@@ -121,6 +121,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_4: task = 4; break;
 		case SDLK_5: task = 5; break;
 		case SDLK_6: task = 6; break;
+		case SDLK_7: task = 7; break;
 		
 			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }
