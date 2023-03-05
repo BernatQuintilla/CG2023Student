@@ -25,7 +25,6 @@ public:
 	Camera* camera;
 	float time;
 	float task;
-
 	FloatImage zBuffer;
 
 

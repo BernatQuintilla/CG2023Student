@@ -7,6 +7,8 @@
 #include <iostream>
 Shader* shader = nullptr; 
 Mesh* mesh = nullptr;
+Texture* texture0 = nullptr;
+
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -30,6 +32,7 @@ Application::Application(const char* caption, int width, int height)
 	this->camera->aspect = framebuffer.width / framebuffer.height;
 	this->camera->type = 0;
 	this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
+	/*
 	Mesh mesh1 = Mesh();
 	mesh1.LoadOBJ("meshes/lee.obj");
 	Mesh mesh2 = Mesh();
@@ -59,6 +62,7 @@ Application::Application(const char* caption, int width, int height)
 	entity3->texture->LoadTGA("textures/cleo_color_specular.tga", true);
 	Vector3 v3 = Vector3(0, 0.5, 0);
 	entity3->modelMatrix.RotateLocal(1, v3);
+	*/
 }
 
 Application::~Application()
@@ -72,7 +76,7 @@ void Application::Init(void)
 	mesh = new Mesh();
 	mesh->CreateQuad();
 	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs"); //slides
-	
+	texture0 = Texture::Get("images/fruits.png");
 }
 
 // Render one frame
@@ -82,6 +86,7 @@ void Application::Render(void)
 	shader->Enable();
 	shader->SetFloat("u_time", time);
 	shader->SetFloat("u_task", task);
+	shader->SetTexture("u_texture", texture0);
 	mesh->Render();
 	shader->Disable();
 }

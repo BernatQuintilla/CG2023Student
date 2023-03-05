@@ -1,6 +1,7 @@
 varying vec2 v_uv;
 uniform float u_time;
 uniform float u_task;
+uniform sampler2D u_texture;
 
 void main()
 {
