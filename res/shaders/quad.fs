@@ -78,7 +78,30 @@ void main()
 	}
 	if(u_task == 10){
 		vec4 color = texture2D(u_texture,v_uv);
-		vec4 intColor = vec4(1.0-color.x,color.y,color.z,1.0);
+		vec4 intColor = vec4(1.0-color.x,color.y,1.0-color.z,1.0);
 		gl_FragColor = intColor;
+	}
+	if(u_task == 11){
+		vec4 color = texture2D(u_texture,v_uv);
+		vec4 thresholdColor = vec4(step(0.6,color.x),step(0.6,color.y),step(0.6,color.z),1.0);
+		float threshold = (thresholdColor.x+thresholdColor.y+thresholdColor.z)/3;
+		gl_FragColor = vec4(threshold,threshold,threshold,1.0);
+	}
+	if(u_task == 12){
+		float v = 0.0025;
+		vec4 color1 = texture2D(u_texture,v_uv);
+		vec4 color2 = texture2D(u_texture,vec2(v_uv.x-v,v_uv.y-v));
+		vec4 color3 = texture2D(u_texture,vec2(v_uv.x,v_uv.y-v));
+		vec4 color4 = texture2D(u_texture,vec2(v_uv.x-v,v_uv.y));
+		vec4 color5 = texture2D(u_texture,vec2(v_uv.x+v,v_uv.y-v));
+		vec4 color6 = texture2D(u_texture,vec2(v_uv.x+v,v_uv.y));
+		vec4 color7 = texture2D(u_texture,vec2(v_uv.x+v,v_uv.y+v));
+		vec4 color8 = texture2D(u_texture,vec2(v_uv.x,v_uv.y+v));
+		vec4 color9 = texture2D(u_texture,vec2(v_uv.x-v,v_uv.y+v));
+		float r = (color1.x+color2.x+color3.x+color4.x+color5.x+color6.x+color7.x+color8.x+color9.x)/9;
+		float g = (color1.y+color2.y+color3.y+color4.y+color5.y+color6.y+color7.y+color8.y+color9.y)/9;
+		float b = (color1.z+color2.z+color3.z+color4.z+color5.z+color6.z+color7.z+color8.z+color9.z)/9;
+		vec4 final_color = vec4(r,g,b,1.0);
+		gl_FragColor = final_color;
 	}
 }

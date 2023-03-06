@@ -8,7 +8,7 @@
 Shader* shader = nullptr; 
 Mesh* mesh = nullptr;
 Texture* texture0 = nullptr;
-int sequence[12] = { 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,1};
+int sequence[13] = { 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,11, 12 ,1};
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -116,6 +116,7 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_d: task = sequence[int(task) - 1]; break;
+		case SDLK_z: task = 10; break;
 			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }
 
