@@ -2,6 +2,8 @@ varying vec2 v_uv;
 uniform float u_time;
 uniform float u_task;
 uniform sampler2D u_texture;
+uniform float u_pixelate;
+uniform float u_direction;
 
 void main()
 {
@@ -83,9 +85,8 @@ void main()
 	}
 	if(u_task == 11){
 		vec4 color = texture2D(u_texture,v_uv);
-		vec4 thresholdColor = vec4(step(0.6,color.x),step(0.6,color.y),step(0.6,color.z),1.0);
-		float threshold = (thresholdColor.x+thresholdColor.y+thresholdColor.z)/3;
-		gl_FragColor = vec4(threshold,threshold,threshold,1.0);
+		float m = step(0.46, (color.x + color.y + color.z)/3);
+		gl_FragColor = vec4(m,m,m,1.0);
 	}
 	if(u_task == 12){
 		float v = 0.0025;
@@ -103,5 +104,25 @@ void main()
 		float b = (color1.z+color2.z+color3.z+color4.z+color5.z+color6.z+color7.z+color8.z+color9.z)/9;
 		vec4 final_color = vec4(r,g,b,1.0);
 		gl_FragColor = final_color;
+	}
+	if(u_task == 13){
+		float d = length(v_uv - vec2(0.5));
+		float vignette = smoothstep(0.65, 0.1, d);
+		vec4 color = texture2D(u_texture, v_uv);
+		gl_FragColor = vec4(color.x*vignette,color.y*vignette,color.z*vignette,1.0);
+	}
+	if(u_task == 14){
+		vec2 texel = vec2(u_pixelate); 
+		vec2 coord = floor(v_uv / texel) * texel; 
+		vec4 color = texture2D(u_texture, coord); 
+		gl_FragColor = color;
+	}
+	if(u_task == 15){
+		float angle = u_time*0.2*u_direction;
+		vec2 center = vec2(0.5,0.5);
+		mat2 mrot = mat2(cos(angle),sin(angle),-sin(angle),cos(angle));
+		vec2 coord = (v_uv - center) * mrot + center;
+		vec4 color = texture2D(u_texture, coord); 
+		gl_FragColor = color;
 	}
 }

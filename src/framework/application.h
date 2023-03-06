@@ -25,6 +25,8 @@ public:
 	Camera* camera;
 	float time;
 	float task = 1;
+	float pixelate = 0.01;
+	float direction = 1.0;
 	FloatImage zBuffer;
 
 

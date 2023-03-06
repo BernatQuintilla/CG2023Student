@@ -8,7 +8,6 @@
 Shader* shader = nullptr; 
 Mesh* mesh = nullptr;
 Texture* texture0 = nullptr;
-int sequence[13] = { 2, 3, 4, 5, 6, 7, 8, 9 ,10 ,11, 12 ,1};
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -87,6 +86,8 @@ void Application::Render(void)
 	shader->SetFloat("u_time", time);
 	shader->SetFloat("u_task", task);
 	shader->SetTexture("u_texture", texture0);
+	shader->SetFloat("u_pixelate", pixelate);
+	shader->SetFloat("u_direction", direction);
 	mesh->Render();
 	shader->Disable();
 }
@@ -115,8 +116,12 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); printf("type of projection: Perspective\n"); break;
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
-		case SDLK_d: task = sequence[int(task) - 1]; break;
-		case SDLK_z: task = 10; break;
+		case SDLK_d: if (task == 15) { task = 1; } else { task++; } break;
+		case SDLK_a: if (task == 1) { task = 15; } else { task--; } break;
+		case SDLK_UP: if (pixelate <= 1) { pixelate += 0.0025; } break;
+		case SDLK_DOWN: if (pixelate >= 0) { pixelate -= 0.0025; } break;
+		case SDLK_RIGHT: direction = 1; break;
+		case SDLK_LEFT: direction = -1; break;
 			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
 				   else { framebuffer.flag = true; break; }
 
