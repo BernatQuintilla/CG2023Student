@@ -66,4 +66,19 @@ void main()
 		vec4 color = texture2D(u_texture,v_uv);
 		gl_FragColor = color;
 	}
+	if(u_task == 8){
+		vec4 color = texture2D(u_texture,v_uv);
+		float lum = (color.x+color.y+color.z)/3;
+		gl_FragColor = vec4(lum,lum,lum,1.0);
+	}
+	if(u_task == 9){
+		vec4 color = texture2D(u_texture,v_uv);
+		vec4 invColor = vec4(1.0-color.x,1.0-color.y,1.0-color.z,1.0);
+		gl_FragColor = invColor;
+	}
+	if(u_task == 10){
+		vec4 color = texture2D(u_texture,v_uv);
+		vec4 intColor = vec4(1.0-color.x,color.y,color.z,1.0);
+		gl_FragColor = intColor;
+	}
 }
