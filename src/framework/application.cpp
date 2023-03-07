@@ -8,6 +8,7 @@
 Shader* shader = nullptr; 
 Mesh* mesh = nullptr;
 Texture* texture0 = nullptr;
+Texture* texture1 = nullptr;
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -76,6 +77,7 @@ void Application::Init(void)
 	mesh->CreateQuad();
 	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs"); //slides
 	texture0 = Texture::Get("images/fruits.png");
+	texture1 = Texture::Get("images/street.png");
 }
 
 // Render one frame
@@ -86,6 +88,7 @@ void Application::Render(void)
 	shader->SetFloat("u_time", time);
 	shader->SetFloat("u_task", task);
 	shader->SetTexture("u_texture", texture0);
+	shader->SetTexture("u_texture1", texture1);
 	shader->SetFloat("u_pixelate", pixelate);
 	shader->SetFloat("u_direction", direction);
 	mesh->Render();

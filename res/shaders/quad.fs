@@ -2,6 +2,7 @@ varying vec2 v_uv;
 uniform float u_time;
 uniform float u_task;
 uniform sampler2D u_texture;
+uniform sampler2D u_texture1;
 uniform float u_pixelate;
 uniform float u_direction;
 
