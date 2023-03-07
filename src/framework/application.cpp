@@ -5,7 +5,9 @@
 #include "entity.h"
 #include <cmath>
 #include <iostream>
-Shader* shader = nullptr; 
+
+Shader* shader = nullptr;
+Shader* shader1 = nullptr;
 Mesh* mesh = nullptr;
 Texture* texture0 = nullptr;
 Texture* texture1 = nullptr;
@@ -32,37 +34,8 @@ Application::Application(const char* caption, int width, int height)
 	this->camera->aspect = framebuffer.width / framebuffer.height;
 	this->camera->type = 0;
 	this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
-	/*
-	Mesh mesh1 = Mesh();
-	mesh1.LoadOBJ("meshes/lee.obj");
-	Mesh mesh2 = Mesh();
-	mesh2.LoadOBJ("meshes/anna.obj");
-	Mesh mesh3 = Mesh();
-	mesh3.LoadOBJ("meshes/cleo.obj");
-
-	this->entity1 = new Entity(mesh1, c); 
-	this->entity2 = new Entity(mesh2, Color(255, 0, 0));
-	this->entity3 = new Entity(mesh3, Color(0, 0, 255));
-
-	entity1->modelMatrix.TranslateLocal(0, 0, -0.6);
-	entity1->texture = new Image();
-	entity1->texture->LoadTGA("textures/lee_color_specular.tga", true);
-	//entity1->texture = nullptr;
-
-	entity2->texture = new Image();
-	entity2->modelMatrix.TranslateLocal(-0.55, -0.2, -0.6);
-	//entity2->texture = nullptr;
-	entity2->texture->LoadTGA("textures/anna_color_specular.tga", true);
-	Vector3 v2 = Vector3(0, -0.5, 0);
-	entity2->modelMatrix.RotateLocal(1, v2);
-
-	entity3->texture = new Image();
-	entity3->modelMatrix.TranslateLocal(0.55, -0.2, -0.6);
-	//entity3->texture = nullptr;
-	entity3->texture->LoadTGA("textures/cleo_color_specular.tga", true);
-	Vector3 v3 = Vector3(0, 0.5, 0);
-	entity3->modelMatrix.RotateLocal(1, v3);
-	*/
+	
+	this->entity1 = new Entity(); 
 }
 
 Application::~Application()
@@ -75,9 +48,10 @@ void Application::Init(void)
 	printf("type of projection: Perspective\n");
 	mesh = new Mesh();
 	mesh->CreateQuad();
-	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs"); //slides
-	texture0 = Texture::Get("images/fruits.png");
-	texture1 = Texture::Get("images/street.png");
+	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs");
+	texture0 = Texture::Get("/images/fruits.png");
+	this->entity1->shaders = Shader::Get("shaders/simple.vs", "shaders/simple.fs");
+	this->entity1->textures = Texture::Get("/textures/lee_color_specular.tga");
 }
 
 // Render one frame
@@ -88,25 +62,18 @@ void Application::Render(void)
 	shader->SetFloat("u_time", time);
 	shader->SetFloat("u_task", task);
 	shader->SetTexture("u_texture", texture0);
-	shader->SetTexture("u_texture1", texture1);
+	//shader->SetTexture("u_texture1", texture1);
 	shader->SetFloat("u_pixelate", pixelate);
 	shader->SetFloat("u_direction", direction);
 	mesh->Render();
 	shader->Disable();
+	//this->entity1->Render();
 }
 
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-	/*framebuffer.Fill(Color(0, 0, 0));
-	entity1->Render(&framebuffer, camera, &zBuffer);
-	entity1->modelMatrix.RotateLocal(0.03, up1);
-
-	entity2->Render(&framebuffer, camera, &zBuffer);
-	entity2->modelMatrix.RotateLocal(0.03, up2);
-
-	entity3->Render(&framebuffer, camera, &zBuffer);
-	entity3->modelMatrix.RotateLocal(0.03, up3);*/
+	
 }
 
 //keyboard press event 
@@ -119,57 +86,25 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 		case SDLK_p: camera->type = 0; framebuffer.Fill(Color(0, 0, 0)); this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); printf("type of projection: Perspective\n"); break;
 		case SDLK_w: if (camera->type == 0) { camera->fov += 10; framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
 		case SDLK_s: if (camera->type == 0) { camera->fov -= 10;  framebuffer.Fill(Color(0, 0, 0)); camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane); }; break;
-		case SDLK_d: if (task == 15) { task = 1; } else { task++; } break;
-		case SDLK_a: if (task == 1) { task = 15; } else { task--; } break;
+		case SDLK_d: if (task == 16) { task = 1; } else { task++; } break;
+		case SDLK_a: if (task == 1) { task = 16; } else { task--; } break;
 		case SDLK_UP: if (pixelate <= 1) { pixelate += 0.0025; } break;
 		case SDLK_DOWN: if (pixelate >= 0) { pixelate -= 0.0025; } break;
 		case SDLK_RIGHT: direction = 1; break;
 		case SDLK_LEFT: direction = -1; break;
-			/*case SDLK_z: if (framebuffer.flag) { framebuffer.flag = false; break; }
-				   else { framebuffer.flag = true; break; }
-
-		case SDLK_t: framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 1; entity2->mode = 1; entity3->mode = 1; break;
-
-		case SDLK_c: if (entity1->mode != 2) { framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 2; entity2->mode = 2; entity3->mode = 2; break; }else{ framebuffer.Fill(Color(0, 0, 0)); entity1->mode = 3; entity2->mode = 3; entity3->mode = 3; break; }
-		*/
 	}
 }
 
 void Application::OnMouseButtonDown( SDL_MouseButtonEvent event )
 {
-	int mouse_x = lround(mouse_position.x);
-	int mouse_y = lround(mouse_position.y);
 	if (event.button == SDL_BUTTON_LEFT) {
-		mouse_pressed.x = mouse_x;
-		mouse_pressed.y = mouse_y;
 	}
 }
 
 void Application::OnMouseButtonUp( SDL_MouseButtonEvent event )
 {
-	int mouse_x = lround(mouse_position.x);
-	int mouse_y = lround(mouse_position.y);
 	if (event.button == SDL_BUTTON_LEFT) {
-		/*if (camera->type == 0) {
-			if (mouse_x - mouse_pressed.x < mouse_x) {
-				camera->right += (mouse_x - mouse_pressed.x);
-				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
-			}
-			else if (mouse_x - mouse_pressed.x > mouse_x) {
-				camera->left += (mouse_x - mouse_pressed.x);
-				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
-			}
-			if (mouse_y - mouse_pressed.y < mouse_y) {
-				camera->top += (mouse_y - mouse_pressed.y);
-				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
-			}
-			else if (mouse_y - mouse_pressed.y > mouse_y) {
-				camera->bottom += (mouse_y - mouse_pressed.y);
-				this->camera->SetPerspective(camera->fov, camera->aspect, camera->near_plane, camera->far_plane);
-			}
-		}
-		camera->center.v[0] += (mouse_x - mouse_pressed.x);
-		camera->center.v[1] += (mouse_y - mouse_pressed.y);*/
+
 	}
 }
 

@@ -67,4 +67,6 @@ public:
 	void UpdateViewProjectionMatrix();
 
 	Matrix44 GetViewProjectionMatrix();
+	Matrix44 Camera::GetViewMatrix();
+	Matrix44 Camera::GetProjectionMatrix();
 };

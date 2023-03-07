@@ -8,6 +8,7 @@
 #include "framework.h"
 #include "image.h"
 #include "camera.h"
+#include "texture.h"
 
 class Application
 {

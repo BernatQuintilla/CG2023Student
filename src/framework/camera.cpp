@@ -152,6 +152,17 @@ Matrix44 Camera::GetViewProjectionMatrix()
 
 	return viewprojection_matrix;
 }
+Matrix44 Camera::GetViewMatrix()
+{
+	UpdateViewMatrix();
+	return view_matrix;
+}
+
+Matrix44 Camera::GetProjectionMatrix()
+{
+	UpdateProjectionMatrix();
+	return projection_matrix;
+}
 
 // The following methods have been created for testing.
 // Do not modify them.

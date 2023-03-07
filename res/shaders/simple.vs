@@ -8,6 +8,7 @@ varying vec3 v_world_position;
 varying vec3 v_world_normal;
 
 //here create uniforms for all the data we need here
+uniform sampler2D u_texture;
 
 void main()
 {	

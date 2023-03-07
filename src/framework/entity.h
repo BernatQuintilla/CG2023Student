@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "mesh.h"
 #include "image.h"
+#include "shader.h"
 
 class Mesh;
 
@@ -15,6 +16,9 @@ public:
 	Vector3 v1, v2, v3;
 	Image* texture;
 	int mode = 1;
+	Shader* shaders = nullptr;
+	Texture* textures = nullptr;
+
 	//Constructors
 	Entity() {
 		modelMatrix = Matrix44();
@@ -56,4 +60,6 @@ public:
 	void RenderColor(Image* framebuffer, Camera* camera);
 	void WireframeMulticolor(Image* framebuffer, Camera* camera, std::vector<Vector3> vs, FloatImage* zBuffer);
 	void RenderMulticolor(Image* framebuffer, Camera* camera, FloatImage* zBuffer);
+
+	void Render(void);
 };

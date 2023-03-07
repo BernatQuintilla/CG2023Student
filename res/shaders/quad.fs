@@ -81,7 +81,7 @@ void main()
 	}
 	if(u_task == 10){
 		vec4 color = texture2D(u_texture,v_uv);
-		vec4 intColor = vec4(1.0-color.x,color.y,1.0-color.z,1.0);
+		vec4 intColor = vec4(1.4-color.y,color.x,color.z*0.4,1.0);
 		gl_FragColor = intColor;
 	}
 	if(u_task == 11){

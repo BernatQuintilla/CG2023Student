@@ -5,25 +5,33 @@
 #include "image.h"
 #include <cmath>
 #include <iostream>
+Camera* camera = nullptr;
+void Entity::Render(void) {
+	shaders->Enable();
+	shaders->SetMatrix44("u_model", modelMatrix);
+	shaders->SetMatrix44("u_viewprojection", camera->GetViewProjectionMatrix());
+	shaders->SetTexture("u_texture", textures);
+	shaders->Disable();
+}
 
 //3.2
 void Entity::Render(Image* framebuffer, Camera* camera, FloatImage* zBuffer) {
 	std::vector<Vector3> vs = mesh.GetVertices();
 	std::vector<Vector2> uvs = mesh.GetUVs();
 	zBuffer->Fill(99999);
-	switch (mode) {
-		case 1:
+	//switch (mode) {
+		//case 1:
 			Wireframe(framebuffer, camera, vs, zBuffer, uvs);
-			break;
-		case 2:
-			WireframeColor(framebuffer, camera, vs);
-			break;
-		case 3:
-			WireframeMulticolor(framebuffer, camera, vs, zBuffer);
-			break;
-		default:
-			break;
-	}
+			//break;
+		//case 2:
+			//WireframeColor(framebuffer, camera, vs);
+			//break;
+		//case 3:
+			//WireframeMulticolor(framebuffer, camera, vs, zBuffer);
+			//break;
+		//default:
+			//break;
+	//}
 }
 
 void Entity::RenderColor(Image* framebuffer, Camera* camera) {

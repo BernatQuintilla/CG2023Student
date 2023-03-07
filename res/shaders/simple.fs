@@ -5,7 +5,9 @@ varying vec3 v_world_normal;
 void main()
 {
 	// Set the ouput color per pixel
-	vec3 color = normalize(v_world_normal);
+	if(task == 16){
+		vec3 color = normalize(v_world_normal);
 
-	gl_FragColor = vec4( color, 1.0 );
+		gl_FragColor = vec4( color, 1.0 );
+	}
 }
