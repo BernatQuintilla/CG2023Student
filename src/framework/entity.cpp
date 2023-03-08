@@ -7,11 +7,7 @@
 #include <iostream>
 Camera* camera = nullptr;
 void Entity::Render(void) {
-	shaders->Enable();
-	shaders->SetMatrix44("u_model", modelMatrix);
-	shaders->SetMatrix44("u_viewprojection", camera->GetViewProjectionMatrix());
-	shaders->SetTexture("u_texture", textures);
-	shaders->Disable();
+	this->mesh.Render();
 }
 
 //3.2

@@ -17,6 +17,8 @@ Texture::Texture()
 	type = GL_UNSIGNED_BYTE;
 }
 
+
+
 Texture* Texture::Get(const char* filename)
 {
 	std::string name = std::string(filename);

@@ -25,6 +25,7 @@ public:
 	void CreateQuad();
 
 	bool LoadOBJ(const char* filename);
+	void setMesh(Mesh* mesh);
 
 	const std::vector<Vector3>& GetVertices() { return vertices; }
 	const std::vector<Vector3>& GetNormals() { return normals; }

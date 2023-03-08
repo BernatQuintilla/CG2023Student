@@ -10,7 +10,7 @@ Shader* shader = nullptr;
 Shader* shader1 = nullptr;
 Mesh* mesh = nullptr;
 Texture* texture0 = nullptr;
-Texture* texture1 = nullptr;
+Texture* textureStreet = nullptr;
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -48,26 +48,47 @@ void Application::Init(void)
 	printf("type of projection: Perspective\n");
 	mesh = new Mesh();
 	mesh->CreateQuad();
+	Mesh* lee = new Mesh();
+	lee->LoadOBJ("meshes/lee.obj");
+	Texture* texture1 = new Texture();
+	texture1->Load("textures/lee_color_specular.tga", false);
+	entity1->mesh.setMesh(lee);
+	entity1->textures = texture1;
+
 	shader = Shader::Get("shaders/quad.vs", "shaders/quad.fs");
 	texture0 = Texture::Get("/images/fruits.png");
+	//Texture* texture2 = new Texture();
+	//texture2->Load("images/street.png", false);
+	//textureStreet = texture2;
 	this->entity1->shaders = Shader::Get("shaders/simple.vs", "shaders/simple.fs");
-	this->entity1->textures = Texture::Get("/textures/lee_color_specular.tga");
 }
 
 // Render one frame
 void Application::Render(void)
 {
 	// para 3D mallas: glEnable(GL_DEPTH_TEST)
-	shader->Enable();
-	shader->SetFloat("u_time", time);
-	shader->SetFloat("u_task", task);
-	shader->SetTexture("u_texture", texture0);
-	//shader->SetTexture("u_texture1", texture1);
-	shader->SetFloat("u_pixelate", pixelate);
-	shader->SetFloat("u_direction", direction);
-	mesh->Render();
-	shader->Disable();
-	//this->entity1->Render();
+	if (task < 16) {
+		shader->Enable();
+		shader->SetFloat("u_time", time);
+		shader->SetFloat("u_task", task);
+		shader->SetTexture("u_texture", texture0);
+		//shader->SetTexture("u_texture1", textureStreet);
+		shader->SetFloat("u_pixelate", pixelate);
+		shader->SetFloat("u_direction", direction);
+		mesh->Render();
+		shader->Disable();
+	}
+	else {
+		glEnable(GL_DEPTH_TEST);
+		shader1->Enable();
+		shader1->SetFloat("u_task", task);
+		shader1->SetTexture("u_texture", this->entity1->textures);
+		shader1->SetMatrix44("u_model", entity1->modelMatrix);
+		shader1->SetMatrix44("u_viewprojectionmatrix", this->camera->GetProjectionMatrix());
+		mesh->Render();
+		shader1->Disable();
+		glDisable(GL_DEPTH_TEST);
+	}
 }
 
 // Called after render

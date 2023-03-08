@@ -100,6 +100,11 @@ void Mesh::CreatePlane(float size)
 	uvs.push_back(Vector2(1, 1));
 	uvs.push_back(Vector2(0, 0));
 }
+void Mesh::setMesh(Mesh* mesh) {
+	this->vertices = mesh->GetVertices();
+	this->normals = mesh->GetNormals();
+	this->uvs = mesh->GetUVs();
+}
 
 bool Mesh::LoadOBJ(const char* filename)
 {
