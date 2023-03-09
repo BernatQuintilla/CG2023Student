@@ -5,7 +5,6 @@
 #include "image.h"
 #include <cmath>
 #include <iostream>
-Camera* camera = nullptr;
 
 void Entity::Render(void) {
 	this->mesh.Render();

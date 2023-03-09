@@ -20,14 +20,13 @@ public:
 	int window_width;
 	int window_height;
 	Entity* entity1;
-	Entity* entity2;
-	Entity* entity3;
 	Vector3 up1 = Vector3(0, 1, 0), up2 = Vector3(0.5, 1, 0),  up3 = Vector3(0.5,-1,0);
 	Camera* camera;
 	float time;
 	float task = 1;
 	float pixelate = 0.01;
 	float direction = 1.0;
+	bool flag = true;
 	FloatImage zBuffer;
 
 

@@ -9,6 +9,7 @@
 
 class Camera
 {
+public:	
 	// OpenGL methods to fill matrices
 	// Only to test Draw3DEntity
 	void SetExampleViewMatrix();

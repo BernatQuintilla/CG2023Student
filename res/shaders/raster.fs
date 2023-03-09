@@ -10,8 +10,7 @@ uniform float u_task;
 void main()
 {
 	// Set the ouput color per pixel
-	//if(u_task == 16){
-		vec4 color = texture2D(u_texture, v_uv);
-		gl_FragColor = color;
+	//if(u_task == 16){texture2D(u_texture, v_uv);
+		gl_FragColor = texture2D(u_texture, v_uv);
 	//}
 }

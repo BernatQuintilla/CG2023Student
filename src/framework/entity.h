@@ -16,7 +16,6 @@ public:
 	Vector3 v1, v2, v3;
 	Image* texture;
 	int mode = 1;
-	Shader* shaders = nullptr;
 	Texture* textures = nullptr;
 
 	//Constructors
