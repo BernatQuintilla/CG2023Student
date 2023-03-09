@@ -94,7 +94,7 @@ void main()
 	if(u_task == 14){
 		vec2 texel = vec2(u_pixelate); 
 		vec2 coord = floor(v_uv / texel) * texel; 
-		vec4 color = texture2D(u_texture, coord); 
+		vec4 color = texture2D(u_texture1, coord); 
 		gl_FragColor = color;
 	}
 	if(u_task == 15){
@@ -102,7 +102,7 @@ void main()
 		vec2 center = vec2(0.5,0.5);
 		mat2 mrot = mat2(cos(angle),sin(angle),-sin(angle),cos(angle));
 		vec2 coord = (v_uv - center) * mrot + center;
-		vec4 color = texture2D(u_texture, coord); 
+		vec4 color = texture2D(u_texture1, coord); 
 		gl_FragColor = color;
 	}
 }
