@@ -12,7 +12,7 @@ varying vec3 v_world_normal;
 void main()
 {	
 	v_uv = gl_MultiTexCoord0.xy;
-
+	
 	// Convert local position to world space
 	vec3 world_position = (u_model * vec4( gl_Vertex.xyz, 1.0)).xyz;
 
