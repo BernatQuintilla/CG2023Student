@@ -113,8 +113,8 @@ void main()
 	if(u_task == 17){ //3 extra: Displacement
 		float cx = x + clamp(sin(u_time),0,2);
 		float cy = y + clamp(cos(u_time),0,2);
-		v_uv.x = cx;
-		v_uv.y = cy;
-		gl_FragColor =  texture2D(u_texture,v_uv);
+		//v_uv.x = cx;
+		//v_uv.y = cy;
+		gl_FragColor =  texture2D(u_texture,vec2(cx,cy));
 	}
 }
