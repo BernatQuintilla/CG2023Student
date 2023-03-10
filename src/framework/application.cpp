@@ -40,10 +40,7 @@ Application::Application(const char* caption, int width, int height)
 	this->camera->type = 0;
 	this->entity1 = new Entity(); 
 	this->entity1->modelMatrix.SetIdentity();
-	//this->entity1->modelMatrix.SetTranslation(0,0,0);
-	this->camera->SetExampleViewMatrix();
-	this->camera->SetExampleProjectionMatrix();
-	this->camera->UpdateViewProjectionMatrix();
+	this->entity1->modelMatrix.SetTranslation(0,0,0);
 }
 
 Application::~Application()
@@ -92,7 +89,7 @@ void Application::Render(void)
 		shader->SetFloat("u_task", task);
 		shader->SetTexture("u_texture", textureFace);
 		shader->SetMatrix44("u_model", entity1->modelMatrix);
-		shader->SetMatrix44("u_viewprojectionmatrix", this->camera->viewprojection_matrix);
+		shader->SetMatrix44("u_viewprojection", this->camera->viewprojection_matrix);
 		this->entity1->Render();
 		shader->Disable();
 		glDisable(GL_DEPTH_TEST);
