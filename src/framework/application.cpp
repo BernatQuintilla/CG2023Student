@@ -36,12 +36,14 @@ Application::Application(const char* caption, int width, int height)
 	Vector3 eye = Vector3(0, 0, 1);
 	Vector3 center = Vector3(0, 0, 0);
 	this->camera->LookAt(eye, center, up);
-	this->camera->SetPerspective(45, (float)window_width / window_height, 0.01, 100);
-	
+	this->camera->SetPerspective(100, (float)window_width / window_height, 0.01, 100);
+	this->camera->type = 0;
 	this->entity1 = new Entity(); 
 	this->entity1->modelMatrix.SetIdentity();
-	this->entity1->modelMatrix.SetTranslation(0,0,0);
+	//this->entity1->modelMatrix.SetTranslation(0,0,0);
+	this->camera->SetExampleViewMatrix();
 	this->camera->SetExampleProjectionMatrix();
+	this->camera->UpdateViewProjectionMatrix();
 }
 
 Application::~Application()
@@ -90,7 +92,7 @@ void Application::Render(void)
 		shader->SetFloat("u_task", task);
 		shader->SetTexture("u_texture", textureFace);
 		shader->SetMatrix44("u_model", entity1->modelMatrix);
-		shader->SetMatrix44("u_viewprojectionmatrix", this->camera->projection_matrix);
+		shader->SetMatrix44("u_viewprojectionmatrix", this->camera->viewprojection_matrix);
 		this->entity1->Render();
 		shader->Disable();
 		glDisable(GL_DEPTH_TEST);
