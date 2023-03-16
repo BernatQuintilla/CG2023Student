@@ -7,11 +7,9 @@
 #include <iostream>
 
 Shader* shader = nullptr;
-Shader* shader1 = nullptr;
-Shader* shader2 = nullptr;
+Shader* gouraud = nullptr;
 Mesh* mesh = nullptr;
 Texture* texturefruits = nullptr;
-Texture* textureStreet = nullptr;
 Texture* textureFace = nullptr;
 
 Application::Application(const char* caption, int width, int height)
@@ -41,6 +39,10 @@ Application::Application(const char* caption, int width, int height)
 	this->entity1 = new Entity(); 
 	this->entity1->modelMatrix.SetIdentity();
 	this->entity1->modelMatrix.SetTranslation(0,0,0);
+
+	this->light.Id = Vector3(0.2);
+	this->light.Is = Vector3(0.5);
+	this->light.position = Vector3(0);
 }
 
 Application::~Application()
@@ -59,39 +61,40 @@ void Application::Init(void)
 	entity1->mesh.setMesh(lee);
 	textureFace = new Texture();
 	textureFace->Load("textures/lee_color_specular.tga", false);
-
-	shader1 = Shader::Get("shaders/quad.vs", "shaders/quad.fs");
-	texturefruits = Texture::Get("/images/fruits.png");
-	//Texture* texture2 = new Texture();
-	//texture2->Load("images/street.png", false);
-	//textureStreet = texture2;
-	shader2 = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
+	
+	shader = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
+	gouraud = Shader::Get("shaders/gouraud.vs", "shaders/gouraud.fs");
+	MaterialEntity = new Material();
+	MaterialEntity->shader = gouraud;
+	MaterialEntity->texture = textureFace;
+	MaterialEntity->Ka = 0.9;
+	MaterialEntity->Kd = 0.9;
+	MaterialEntity->Ks = 0.5;
+	MaterialEntity->Shininess = 7;
+	entity1->material = MaterialEntity;
 }
 
 // Render one frame
 void Application::Render(void)
 {
-	if (task < 18) {
-		shader = shader1;
-		shader->Enable();
-		shader->SetFloat("u_time", time);
-		shader->SetFloat("u_task", task);
-		shader->SetTexture("u_texture", texturefruits);
-		//shader->SetTexture("u_texture1", textureStreet);
-		shader->SetFloat("u_pixelate", pixelate);
-		shader->SetFloat("u_direction", direction);
-		mesh->Render();
-		shader->Disable();
-	}else{
-		shader = shader2;
-		if (flag){ glEnable(GL_DEPTH_TEST); }
-		shader->Enable();
+	if (flag){ glEnable(GL_DEPTH_TEST);
+		/*shader->Enable();
 		shader->SetFloat("u_task", task);
 		shader->SetTexture("u_texture", textureFace);
 		shader->SetMatrix44("u_model", entity1->modelMatrix);
 		shader->SetMatrix44("u_viewprojection", this->camera->viewprojection_matrix);
 		this->entity1->Render();
 		shader->Disable();
+		glDisable(GL_DEPTH_TEST);*/
+
+		//glEnable(GL_DEPTH_TEST);
+
+		uniformdata.Ia = this->Ia;
+		uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
+		uniformdata.numLights = 1;
+		uniformdata.Light = this->light;
+		entity1->Render(uniformdata);
+
 		glDisable(GL_DEPTH_TEST);
 	}
 }

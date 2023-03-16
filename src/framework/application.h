@@ -28,7 +28,10 @@ public:
 	float direction = 1.0;
 	bool flag = true;
 	FloatImage zBuffer;
-
+	Material* MaterialEntity;
+	sLight light;
+	sUniformData uniformdata;
+	Vector3 Ia;
 
 	// Input
 	const Uint8* keystate;

@@ -5,6 +5,7 @@
 #include "mesh.h"
 #include "image.h"
 #include "shader.h"
+#include "material.h"
 
 class Mesh;
 
@@ -17,6 +18,7 @@ public:
 	Image* texture;
 	int mode = 1;
 	Texture* textures = nullptr;
+	Material* material;
 
 	//Constructors
 	Entity() {
@@ -60,5 +62,5 @@ public:
 	void WireframeMulticolor(Image* framebuffer, Camera* camera, std::vector<Vector3> vs, FloatImage* zBuffer);
 	void RenderMulticolor(Image* framebuffer, Camera* camera, FloatImage* zBuffer);
 
-	void Render(void);
+	void Render(sUniformData uniformdata);
 };

@@ -6,8 +6,11 @@
 #include <cmath>
 #include <iostream>
 
-void Entity::Render(void) {
-	this->mesh.Render();
+void Entity::Render(sUniformData uniformdata) {
+	uniformdata.ModelMatrix = this->modelMatrix;
+	this->material->Enable(uniformdata);
+	mesh.Render();
+	this->material->Disable();
 }
 
 //3.2
