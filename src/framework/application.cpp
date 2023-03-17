@@ -3,6 +3,7 @@
 #include "shader.h"
 #include "utils.h" 
 #include "entity.h"
+
 #include <cmath>
 #include <iostream>
 
@@ -11,6 +12,9 @@ Shader* gouraud = nullptr;
 Mesh* mesh = nullptr;
 Texture* texturefruits = nullptr;
 Texture* textureFace = nullptr;
+sUniformData uniformdata;
+sLight light;
+Vector3 Ia;
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -40,9 +44,9 @@ Application::Application(const char* caption, int width, int height)
 	this->entity1->modelMatrix.SetIdentity();
 	this->entity1->modelMatrix.SetTranslation(0,0,0);
 
-	this->light.Id = Vector3(0.2);
-	this->light.Is = Vector3(0.5);
-	this->light.position = Vector3(0);
+	light.Id = Vector3(0.2);
+	light.Is = Vector3(0.2);
+	light.position = Vector3(0);
 }
 
 Application::~Application()
@@ -64,14 +68,13 @@ void Application::Init(void)
 	
 	shader = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
 	gouraud = Shader::Get("shaders/gouraud.vs", "shaders/gouraud.fs");
-	MaterialEntity = new Material();
-	MaterialEntity->shader = gouraud;
-	MaterialEntity->texture = textureFace;
-	MaterialEntity->Ka = 0.9;
-	MaterialEntity->Kd = 0.9;
-	MaterialEntity->Ks = 0.5;
-	MaterialEntity->Shininess = 7;
-	entity1->material = MaterialEntity;
+	entity1->material = new Material();
+	entity1->material->shader = gouraud;
+	entity1->material->texture = textureFace;
+	entity1->material->Ka = 0.9;
+	entity1->material->Kd = 0.9;
+	entity1->material->Ks = 0.9;
+	entity1->material->Shininess = 5;
 }
 
 // Render one frame
@@ -89,11 +92,11 @@ void Application::Render(void)
 
 		//glEnable(GL_DEPTH_TEST);
 
-		uniformdata.Ia = this->Ia;
+		uniformdata.Ia = Ia;
 		uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
 		uniformdata.numLights = 1;
-		uniformdata.Light = this->light;
-		entity1->Render(uniformdata);
+		uniformdata.Light = light;
+		this->entity1->Render(uniformdata);
 
 		glDisable(GL_DEPTH_TEST);
 	}
