@@ -9,6 +9,17 @@ varying vec3 v_world_position;
 varying vec3 v_world_normal;
 
 //here create uniforms for all the data we need here
+uniform vec3 u_Ia;
+uniform vec3 u_Id;
+uniform vec3 u_Is;
+
+uniform vec3 u_lightpos;
+
+uniform float u_shine;
+uniform vec3 u_Ka;
+uniform vec3 u_Kd;
+uniform vec3 u_Ks;
+//vec3 Ip = u_Ka * u_Ia + u_Kd *(dot(v_world_position,v_world_normal)) * u_Id + u_Ks*(dot())
 
 void main()
 {	

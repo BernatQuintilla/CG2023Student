@@ -3,6 +3,7 @@
 #include "shader.h"
 #include "utils.h" 
 #include "entity.h"
+#include "Material.h"
 
 #include <cmath>
 #include <iostream>

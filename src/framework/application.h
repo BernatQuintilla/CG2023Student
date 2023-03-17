@@ -9,7 +9,7 @@
 #include "image.h"
 #include "camera.h"
 #include "texture.h"
-#include "material.h"
+#include "Material.h"
 
 class Application
 {
