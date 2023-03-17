@@ -7,7 +7,7 @@ uniform mat4 u_viewprojection;
 varying vec2 v_uv;
 varying vec3 v_world_position;
 varying vec3 v_world_normal;
-varying vec3 Ip;
+varying vec3 v_finalcolor;
 
 //here create uniforms for all the data we need here
 uniform vec3 u_Ia;
@@ -16,10 +16,12 @@ uniform vec3 u_Is;
 
 uniform vec3 u_lightpos;
 
-uniform float u_shine;
+uniform float u_shininess;
 uniform vec3 u_Ka;
 uniform vec3 u_Kd;
 uniform vec3 u_Ks;
+uniform sampler2D u_texture;
+uniform vec3 u_eyepos;
 
 void main()
 {	
@@ -36,8 +38,13 @@ void main()
 	v_world_normal = world_normal;
 
 	// Compute Ip
-	//vec3 R = 
-	//vec3 Ip = u_Ka * u_Ia + u_Kd *(dot(v_world_position,v_world_normal)) * u_Id + u_Ks*(dot())
+	vec3 N = normalize(world_normal);
+	vec3 L = normalize(u_lightpos - world_position);
+	vec3 V = normalize(u_eyepos - world_position);
+	vec3 R = normalize(reflect(-L, N));
+	
+	vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(0,1,dot(L, N)) + u_Ks * u_Is * pow(dot(R, V), u_shininess);
+	v_finalcolor = u_Ka * u_Ia + u_Kd * u_Id * dot(L, N) + u_Ks * pow(dot(R, V), u_shininess) * u_Is;
 
 	// Project the vertex using the model view projection matrix
 	gl_Position = u_viewprojection * vec4(world_position, 1.0); //output of the vertex shader

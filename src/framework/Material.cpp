@@ -10,7 +10,7 @@
 void Material::Enable(const sUniformData& uniformdata) {
 	this->shader->Enable();
 
-	this->shader->SetFloat("u_shine", this->Shininess);
+	this->shader->SetFloat("u_shininess", this->Shininess);
 
 	this->shader->SetVector3("u_Ka", this->Ka);
 	this->shader->SetVector3("u_Kd", this->Kd);
@@ -24,6 +24,7 @@ void Material::Enable(const sUniformData& uniformdata) {
 	this->shader->SetVector3("u_Id", uniformdata.Light.Id);
 	this->shader->SetVector3("u_Is", uniformdata.Light.Is);
 	this->shader->SetVector3("u_lightpos", uniformdata.Light.position);
+	this->shader->SetVector3("u_eyepos", uniformdata.eyepos);
 }
 
 void Material::Disable() {

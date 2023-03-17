@@ -15,7 +15,7 @@ Texture* texturefruits = nullptr;
 Texture* textureFace = nullptr;
 sUniformData uniformdata;
 sLight light;
-Vector3 Ia;
+Vector3 Ia = (2,2,3);
 
 Application::Application(const char* caption, int width, int height)
 {
@@ -45,9 +45,9 @@ Application::Application(const char* caption, int width, int height)
 	this->entity1->modelMatrix.SetIdentity();
 	this->entity1->modelMatrix.SetTranslation(0,0,0);
 
-	light.Id = Vector3(0.2);
-	light.Is = Vector3(0.2);
-	light.position = Vector3(0);
+	light.Id = Vector3(0.8);
+	light.Is = Vector3(1);
+	light.position = Vector3(2,2,4);
 }
 
 Application::~Application()
@@ -72,10 +72,10 @@ void Application::Init(void)
 	entity1->material = new Material();
 	entity1->material->shader = shader;
 	entity1->material->texture = textureFace;
-	entity1->material->Ka = 0.9;
-	entity1->material->Kd = 0.9;
-	entity1->material->Ks = 0.9;
-	entity1->material->Shininess = 5;
+	entity1->material->Ka = 0.1;
+	entity1->material->Kd = 0.1;
+	entity1->material->Ks = 0.1;
+	entity1->material->Shininess = 50;
 }
 
 // Render one frame
@@ -83,6 +83,7 @@ void Application::Render(void)
 {
 		glEnable(GL_DEPTH_TEST);
 		if (task == 1) {
+			entity1->material->shader = shader;
 			shader->Enable();
 			shader->SetFloat("u_task", task);
 			shader->SetTexture("u_texture", textureFace);
@@ -92,10 +93,11 @@ void Application::Render(void)
 			shader->Disable();
 		}
 		if (task == 2) {
+			entity1->material->shader = gouraud;
 			uniformdata.Ia = Ia;
 			uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
-			uniformdata.numLights = 1;
 			uniformdata.Light = light;
+			uniformdata.eyepos = this->camera->eye;
 			this->entity1->Render(uniformdata);
 		}
 		glDisable(GL_DEPTH_TEST);

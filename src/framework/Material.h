@@ -12,11 +12,11 @@ struct sLight {
 	Vector3 Is;
 };
 struct sUniformData {
-	int numLights;
 	sLight Light;
 	Matrix44 ModelMatrix;
 	Matrix44 CameraViewProjection;
 	Vector3 Ia;
+	Vector3 eyepos;
 };
 
 class Material {
