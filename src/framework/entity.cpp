@@ -12,6 +12,9 @@ void Entity::Render(sUniformData uniformdata) {
 	mesh.Render();
 	this->material->Disable();
 }
+void Entity::Render2(void) {
+	mesh.Render();
+}
 
 //3.2
 void Entity::Render(Image* framebuffer, Camera* camera, FloatImage* zBuffer) {

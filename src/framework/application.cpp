@@ -70,7 +70,7 @@ void Application::Init(void)
 	shader = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
 	gouraud = Shader::Get("shaders/gouraud.vs", "shaders/gouraud.fs");
 	entity1->material = new Material();
-	entity1->material->shader = gouraud;
+	entity1->material->shader = shader;
 	entity1->material->texture = textureFace;
 	entity1->material->Ka = 0.9;
 	entity1->material->Kd = 0.9;
@@ -81,26 +81,24 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
-	if (flag){ glEnable(GL_DEPTH_TEST);
-		/*shader->Enable();
-		shader->SetFloat("u_task", task);
-		shader->SetTexture("u_texture", textureFace);
-		shader->SetMatrix44("u_model", entity1->modelMatrix);
-		shader->SetMatrix44("u_viewprojection", this->camera->viewprojection_matrix);
-		this->entity1->Render();
-		shader->Disable();
-		glDisable(GL_DEPTH_TEST);*/
-
-		//glEnable(GL_DEPTH_TEST);
-
-		uniformdata.Ia = Ia;
-		uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
-		uniformdata.numLights = 1;
-		uniformdata.Light = light;
-		this->entity1->Render(uniformdata);
-
+		glEnable(GL_DEPTH_TEST);
+		if (task == 1) {
+			shader->Enable();
+			shader->SetFloat("u_task", task);
+			shader->SetTexture("u_texture", textureFace);
+			shader->SetMatrix44("u_model", entity1->modelMatrix);
+			shader->SetMatrix44("u_viewprojection", this->camera->viewprojection_matrix);
+			this->entity1->Render2();
+			shader->Disable();
+		}
+		if (task == 2) {
+			uniformdata.Ia = Ia;
+			uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
+			uniformdata.numLights = 1;
+			uniformdata.Light = light;
+			this->entity1->Render(uniformdata);
+		}
 		glDisable(GL_DEPTH_TEST);
-	}
 }
 
 // Called after render
@@ -115,13 +113,8 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
-		case SDLK_d: if (task == 18) { task = 1; } else { task++; } break;
-		case SDLK_a: if (task == 1) { task = 18; } else { task--; } break;
-		case SDLK_UP: if (pixelate <= 1) { pixelate += 0.0025; } break;
-		case SDLK_DOWN: if (pixelate >= 0) { pixelate -= 0.0025; } break;
-		case SDLK_RIGHT: direction = 1; break;
-		case SDLK_LEFT: direction = -1; break;
-		case SDLK_b: if (flag) { flag = false; } else { flag = true; }
+		case SDLK_d: if (task == 2) { task = 1; } else { task++; } break;
+		case SDLK_a: if (task == 1) { task = 2; } else { task--; } break;
 	}
 }
 

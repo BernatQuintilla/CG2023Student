@@ -63,4 +63,5 @@ public:
 	void RenderMulticolor(Image* framebuffer, Camera* camera, FloatImage* zBuffer);
 
 	void Render(sUniformData uniformdata);
+	void Render2(void);
 };
