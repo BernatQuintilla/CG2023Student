@@ -46,6 +46,7 @@ Application::Application(const char* caption, int width, int height)
 	this->entity1->modelMatrix.SetIdentity();
 	this->entity1->modelMatrix.SetTranslation(0,0,0);
 
+	//Setting light
 	light.Id = Vector3(0.8);
 	light.Is = Vector3(1);
 	light.position = Vector3(2,2,3);
@@ -60,19 +61,25 @@ void Application::Init(void)
 	std::cout << "Initiating app..." << std::endl;
 	printf("type of projection: Perspective\n");
 
+	//Mesh
 	mesh = new Mesh();
 	mesh->CreateQuad();
 	Mesh* lee = new Mesh();
 	lee->LoadOBJ("meshes/lee.obj");
 	entity1->mesh.setMesh(lee);
+
+	//Textures
 	textureFace = new Texture();
 	textureFace->Load("textures/lee_color_specular.tga", false);
 	normalFace = new Texture();
 	normalFace->Load("textures/lee_normal.tga", false);
 	
+	//Shaders
 	shader = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
 	gouraud = Shader::Get("shaders/gouraud.vs", "shaders/gouraud.fs");
 	phong = Shader::Get("shaders/phong.vs", "shaders/phong.fs");
+
+	//Filling Material
 	entity1->material = new Material();
 	entity1->material->shader = shader;
 	entity1->material->texture = textureFace;
