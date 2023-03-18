@@ -28,19 +28,19 @@ void main()
 {
 	if(u_flag == 1.0){
 		vec4 Kd = texture2D(u_texture,v_uv);
+		vec4 Ka = vec4(0.02,0.02,0.02,1.0);
 		vec4 Ks = vec4(texture2D(u_texture,v_uv).w);
-		vec4 Ka = Kd;
 
 		vec3 N = texture2D(u_normal_texture,v_uv).xyz;
-		N = N * 2 - vec3(1.0);
 		N = (u_model * vec4(N, 0.0)).xyz;
-
+		N = N*2 - vec3(1.0,1.0,1.0);
 		vec3 L = normalize(u_lightpos - v_world_position);
 		vec3 V = normalize(u_eyepos - v_world_position);
 		vec3 R = normalize(reflect(-L,N));
-		vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(dot(L, N),0.0,1.0) + u_Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
-		
-		gl_FragColor = vec4(Ip,1.0);
+
+		vec3 Ip = u_Ia * Ka + Kd* u_Id * clamp(dot(L, N),0.0,1.0) + Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
+		gl_FragColor = vec4(Ip, 1.0);
+
 	}if(u_flag == 0.0){
 		vec3 N = normalize(v_world_normal.xyz);
 		vec3 L = normalize(u_lightpos - v_world_position);

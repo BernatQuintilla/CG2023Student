@@ -41,14 +41,36 @@ void main()
 	v_world_normal = world_normal;
 
 	// Compute Ip
-	vec3 N = normalize(world_normal);
-	vec3 L = normalize(u_lightpos - world_position);
-	vec3 V = normalize(u_eyepos - world_position);
-	vec3 R = normalize(reflect(-L, N));
-	
-	vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(dot(L, N),0.0,1.0) + u_Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
-	v_finalcolor = Ip;
+	if (u_flag == 1.0) {
+		vec4 Kd = texture2D(u_texture, v_uv);
+		vec4 Ka = vec4(0.02,0.02,0.02,1.0);
+		vec4 Ks = vec4(texture2D(u_texture, v_uv).w);
 
-	// Project the vertex using the model view projection matrix
-	gl_Position = u_viewprojection * vec4(world_position, 1.0); //output of the vertex shader
+		//vec3 N = texture2D(u_normal_texture,v_uv).xyz;
+		//N = (u_model * vec4(N, 0.0)).xyz;
+		//N = N*2 - vec3(1.0,1.0,1.0);
+		vec3 N = normalize(world_normal);
+		vec3 L = normalize(u_lightpos - world_position);
+		vec3 V = normalize(u_eyepos - world_position);
+		vec3 R = normalize(reflect(-L, N));
+
+		vec3 Ip = u_Ia * Ka + Kd* u_Id * clamp(dot(L, N),0.0,1.0) + Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
+		v_finalcolor = Ip;
+
+		// Project the vertex using the model view projection matrix
+		gl_Position = u_viewprojection * vec4(world_position, 1.0); //output of the vertex shader
+
+	}
+	if (u_flag == 0.0) {
+		vec3 N = normalize(world_normal);
+		vec3 L = normalize(u_lightpos - world_position);
+		vec3 V = normalize(u_eyepos - world_position);
+		vec3 R = normalize(reflect(-L, N));
+	
+		vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(dot(L, N),0.0,1.0) + u_Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
+		v_finalcolor = Ip;
+
+		// Project the vertex using the model view projection matrix
+		gl_Position = u_viewprojection * vec4(world_position, 1.0); //output of the vertex shader
+	}
 }

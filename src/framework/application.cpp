@@ -108,7 +108,6 @@ void Application::Render(void)
 		if (task == 3) {
 			entity1->material->shader = phong;
 			entity1->material->flag = this->flag;
-			printf("%f\n", this->flag);
 			uniformdata.Ia = Ia;
 			uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
 			uniformdata.Light = light;
