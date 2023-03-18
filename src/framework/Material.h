@@ -24,10 +24,12 @@ public:
 	//Attributes
 	Shader* shader;
 	Texture* texture;
+	Texture* normal_texture;
 	Vector3 Ka;
 	Vector3 Kd;
 	Vector3 Ks;
 	float Shininess;
+	float flag;
 
 	//Constructor
 	Material() { shader = nullptr; texture = nullptr; Ka = (0, 0, 0); Kd = (0, 0, 0); Ks = (0, 0, 0); Shininess = 0; }

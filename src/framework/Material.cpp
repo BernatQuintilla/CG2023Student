@@ -17,6 +17,7 @@ void Material::Enable(const sUniformData& uniformdata) {
 	this->shader->SetVector3("u_Ks", this->Ks);
 
 	this->shader->SetTexture("u_texture", this->texture);
+	this->shader->SetTexture("u_normal_texture", this->normal_texture);
 	this->shader->SetMatrix44("u_model", uniformdata.ModelMatrix);
 	this->shader->SetMatrix44("u_viewprojection", uniformdata.CameraViewProjection);
 
@@ -25,6 +26,7 @@ void Material::Enable(const sUniformData& uniformdata) {
 	this->shader->SetVector3("u_Is", uniformdata.Light.Is);
 	this->shader->SetVector3("u_lightpos", uniformdata.Light.position);
 	this->shader->SetVector3("u_eyepos", uniformdata.eyepos);
+	this->shader->SetFloat("u_flag", this->flag);
 }
 
 void Material::Disable() {

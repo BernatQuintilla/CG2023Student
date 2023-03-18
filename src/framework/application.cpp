@@ -10,9 +10,10 @@
 
 Shader* shader = nullptr;
 Shader* gouraud = nullptr;
+Shader* phong = nullptr;
 Mesh* mesh = nullptr;
-Texture* texturefruits = nullptr;
 Texture* textureFace = nullptr;
+Texture* normalFace = nullptr;
 sUniformData uniformdata;
 sLight light;
 Vector3 Ia = (2,2,3);
@@ -66,12 +67,16 @@ void Application::Init(void)
 	entity1->mesh.setMesh(lee);
 	textureFace = new Texture();
 	textureFace->Load("textures/lee_color_specular.tga", false);
+	normalFace = new Texture();
+	normalFace->Load("textures/lee_normal.tga", false);
 	
 	shader = Shader::Get("shaders/raster.vs", "shaders/raster.fs");
 	gouraud = Shader::Get("shaders/gouraud.vs", "shaders/gouraud.fs");
+	phong = Shader::Get("shaders/phong.vs", "shaders/phong.fs");
 	entity1->material = new Material();
 	entity1->material->shader = shader;
 	entity1->material->texture = textureFace;
+	entity1->material->normal_texture = normalFace;
 	entity1->material->Ka = 0.2;
 	entity1->material->Kd = 0.2;
 	entity1->material->Ks = 0.2;
@@ -83,7 +88,6 @@ void Application::Render(void)
 {
 		glEnable(GL_DEPTH_TEST);
 		if (task == 1) {
-			entity1->material->shader = shader;
 			shader->Enable();
 			shader->SetFloat("u_task", task);
 			shader->SetTexture("u_texture", textureFace);
@@ -94,6 +98,17 @@ void Application::Render(void)
 		}
 		if (task == 2) {
 			entity1->material->shader = gouraud;
+			entity1->material->flag = this->flag;
+			uniformdata.Ia = Ia;
+			uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
+			uniformdata.Light = light;
+			uniformdata.eyepos = this->camera->eye;
+			this->entity1->Render(uniformdata);
+		}
+		if (task == 3) {
+			entity1->material->shader = phong;
+			entity1->material->flag = this->flag;
+			printf("%f\n", this->flag);
 			uniformdata.Ia = Ia;
 			uniformdata.CameraViewProjection = camera->GetViewProjectionMatrix();
 			uniformdata.Light = light;
@@ -115,8 +130,10 @@ void Application::OnKeyPressed( SDL_KeyboardEvent event )
 	// KEY CODES: https://wiki.libsdl.org/SDL2/SDL_Keycode
 	switch(event.keysym.sym) {
 		case SDLK_ESCAPE: exit(0); break; // ESC key, kill the app
-		case SDLK_d: if (task == 2) { task = 1; } else { task++; } break;
-		case SDLK_a: if (task == 1) { task = 2; } else { task--; } break;
+		case SDLK_RIGHT: if (task == 3) { task = 1; } else { task++; } break;
+		case SDLK_LEFT: if (task == 1) { task = 3; } else { task--; } break;
+		case SDLK_UP: this->flag = 1.0; break;
+		case SDLK_DOWN: this->flag = 0.0; break;
 	}
 }
 

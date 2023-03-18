@@ -8,5 +8,5 @@ uniform sampler2D u_texture;
 void main()
 {
 	// Set the ouput color per pixel
-	gl_FragColor = vec4(v_finalcolor,1.0); //texture2D(u_texture, v_uv); 
+	gl_FragColor = vec4(v_finalcolor,1.0);
 }
