@@ -47,7 +47,7 @@ Application::Application(const char* caption, int width, int height)
 
 	light.Id = Vector3(0.8);
 	light.Is = Vector3(1);
-	light.position = Vector3(2,2,4);
+	light.position = Vector3(2,2,3);
 }
 
 Application::~Application()
@@ -72,10 +72,10 @@ void Application::Init(void)
 	entity1->material = new Material();
 	entity1->material->shader = shader;
 	entity1->material->texture = textureFace;
-	entity1->material->Ka = 0.1;
-	entity1->material->Kd = 0.1;
-	entity1->material->Ks = 0.1;
-	entity1->material->Shininess = 50;
+	entity1->material->Ka = 0.2;
+	entity1->material->Kd = 0.2;
+	entity1->material->Ks = 0.2;
+	entity1->material->Shininess = 8;
 }
 
 // Render one frame

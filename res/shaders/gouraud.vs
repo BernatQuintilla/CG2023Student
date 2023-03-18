@@ -43,8 +43,8 @@ void main()
 	vec3 V = normalize(u_eyepos - world_position);
 	vec3 R = normalize(reflect(-L, N));
 	
-	vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(0,1,dot(L, N)) + u_Ks * u_Is * pow(dot(R, V), u_shininess);
-	v_finalcolor = u_Ka * u_Ia + u_Kd * u_Id * dot(L, N) + u_Ks * pow(dot(R, V), u_shininess) * u_Is;
+	vec3 Ip = u_Ia * u_Ka + u_Kd* u_Id * clamp(dot(L, N),0.0,1.0) + u_Ks * u_Is * pow(clamp(dot(R, V),0.0,1.0), u_shininess);
+	v_finalcolor = Ip;
 
 	// Project the vertex using the model view projection matrix
 	gl_Position = u_viewprojection * vec4(world_position, 1.0); //output of the vertex shader
